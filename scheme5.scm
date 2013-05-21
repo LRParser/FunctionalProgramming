@@ -1,29 +1,37 @@
-(define (get-input)
-   (display "Enter expression: ") 
+(define (string-input)
+   (display "Enter expression: ")
    (define readtext (string (read)))
    (display (string-append "Got input: " readtext))
    (newline)
    readtext)
 
+(define symboltable (make-string-hash-table 100))
+
 (define plus?
   (lambda (expr)
-    (eq? expr #\+)))
+    (eq? expr '+)))
 
 (define minus?
   (lambda (expr)
-    (eq? expr #\-)))
+    (eq? expr '-)))
 
-; Example usage: (eval-plus '(+ 1 2))
+(define times?
+  (lambda (expr)
+    (eq? expr '*)))
+
+(define parse-operator 
+	 (lambda(x) (car (cadr x))))
+
 (define (eval-plus expr)
+  (define parsedexpr (car (cadr expr)))
   (let ((operator (car expr))
-    (arg1 (car expr))
-    (arg2 (cadr expr))
-    (arg3 (caddr expr)))
+    (arg1 (car parsedexpr))
+    (arg2 (cadr parsedexpr))
+    (arg3 (caddr parsedexpr)))
   (+ arg2 arg3)
   )
 )
 
-; Example usage: (eval-minus '(- 1 2))
 (define ( eval-minus expr)
  (let ((operator (car expr))
     (arg1 (car expr))
@@ -42,5 +50,12 @@
   )
 )
 
-(define symboltable (make-string-hash-table 100))
+(define plus-expr?
+	  (lambda (expr) 
+	    (plus? (parse-expr expr))))
+
+; Example usagee:
+;48 error> (define f2 (read))
+;'(+ 1 2)
+; (plus-expr? f2)
 

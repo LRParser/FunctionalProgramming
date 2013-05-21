@@ -33,3 +33,14 @@
   )
 )
 
+(define ( eval-times expr)
+ (let ((operator (car expr))
+    (arg1 (car expr))
+    (arg2 (cadr expr))
+    (arg3 (caddr expr)))
+  (* arg2 arg3)
+  )
+)
+
+(define symboltable (make-string-hash-table 100))
+

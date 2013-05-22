@@ -17,9 +17,17 @@
 
 (define null '())
 
+(define has-ident?
+  (lambda (identifier)
+  (not (eq? (eval-ident identifier) none))))
+
 (define eval-ident
   (lambda (identifier)
     (hash-table/get symboltable identifier none)))
+
+(define identifier?
+  (lambda (identifier)
+    (string? identifier)))
 
 ; END Assign 
 
@@ -37,21 +45,57 @@
   (lambda (expr)
     (eq? expr '-)))
 
+(define minus-expr?
+  (lambda (expr)
+    (minus? (parse-operator expr))))
+
 (define times?
   (lambda (expr)
     (eq? expr '*)))
 
+(define times-expr?
+  (lambda (expr)
+    (times? (parse-operator expr))))
+
 (define parse-operator 
 	 (lambda(x) (car (cadr x))))
 
-(define (eval-plus expr)
+(define (eval-matharg arg)
+  (cond
+   ( (has-ident? (string arg)) (eval-ident (string arg)))
+   ( (number? arg) arg)
+   ( else #f)))
+
+(define (eval-math expr op)
   (define parsedexpr (cadr expr))
   (let ((operator (parse-operator expr))
-    (arg2 (cadr parsedexpr))
-    (arg3 (caddr parsedexpr)))
-  (+ arg2 arg3)
+    (arg2   (eval-matharg (cadr parsedexpr)) )
+    (arg3   (eval-matharg (caddr parsedexpr)) ))
+  (op arg2 arg3)
   )
 )
+
+(define (math-expr? expr)
+  (or (plus-expr? expr) (minus-expr? expr) (times-expr? expr)))
+
+(define (eval-mathexpr expr)
+  (cond
+   ( (number? expr) expr)
+   ( (plus-expr? expr) (eval-plus expr) )
+   ( (minus-expr? expr) (eval-minus expr) )
+   ( (times-expr? expr) (eval-times expr) )
+   (else #f)
+   )
+)
+
+(define (eval-plus expr)
+  (eval-math expr +))
+
+(define (eval-minus expr)
+  (eval-math expr -))
+
+(define (eval-times expr)
+  (eval-math expr *))
 
 (define eval-expr
   (lambda (expr)
@@ -62,14 +106,7 @@
     )
 )
 
-(define ( eval-minus expr)
- (let ((operator (car expr))
-    (arg1 (car expr))
-    (arg2 (cadr expr))
-    (arg3 (caddr expr)))
-  (- arg2 arg3)
-  )
-)
+
 ; END Math
 
 (define make-stmtseq

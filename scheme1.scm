@@ -50,13 +50,13 @@
   (let ((function (car expr)))
     (eq? function 'not)))
 
-;;;; Just a place holder at the moment
 (define (implication? expr) 
-  (eq? expr #t))
-
-;;;; Just a place holder at the moment
+  (let ((function (car expr)))
+    (eq? function 'imply)))
+                  
 (define (equivalence? expr) 
-  (eq? expr #t))
+  (let ((function (car expr)))
+    (eq? function 'equiv)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -92,9 +92,15 @@
   (let ((boolean-expr (car (cdr expr))))
     (not (beval boolean-expr env))))
 
-;;;; Just a place holder at the moment  
 (define (beval-imply expr env)
-  (eq? expr #t))
+  (let* ((boolean-expr (cdr expr))
+         (first-subexpr (car boolean-expr))
+         (first-result (beval first-subexpr env))
+         (second-subexpr (car (cdr boolean-expr)))
+         (second-result (beval second-subexpr env)))
+    (if (and first-result (not second-result))
+        #f
+        #t)))
 
 ;;;; Just a place holder at the moment  
 (define (beval-equiv expr env)
@@ -146,6 +152,8 @@
 ;;;; (beval '(not (or p q r)) '((p #f) (q #f) (r #f))) ;Value: #t
 ;;;; (beval '(imply p q) '((p #t) (q #f))) ;Value: #f  
 ;;;; (beval '(imply p q) '((p #t) (q #t))) ;Value: #t  
+;;;; (beval '(imply p q) '((p #f) (q #f))) ;Value: #t
+;;;; (beval '(imply p q) '((p #f) (q #t))) ;Value: #t
 ;;;; (beval '(equiv (imply p q) (or (not p) q)) '((p #t) (q #f))) ;Value: #t 
 ;;;; (contains-only-true? '(#t #f #t #t #t))
   

@@ -38,17 +38,17 @@
 ;;;; in beval 			  	;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;;; Just a place holder at the moment
 (define (conjuct? expr) 
-  (eq? expr #t))
+  (let ((function (car expr)))
+    (eq? function 'and)))
 
-;;;; Just a place holder at the moment
 (define (disjuct? expr) 
-  (eq? expr #t))
+  (let ((function (car expr)))
+    (eq? function 'or)))
 
-;;;; Just a place holder at the moment
 (define (negation? expr) 
-  (eq? expr #t))
+  (let ((function (car expr)))
+    (eq? function 'not)))
 
 ;;;; Just a place holder at the moment
 (define (implication? expr) 
@@ -63,32 +63,37 @@
 ;;;; Evaluation Functions ;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;;; Just a place holder at the moment
-(define ( lookup expr env)
+(define (lookup expr env)
   (let ((var-binding (assoc expr env)))
     (if (eq? var-binding #f)
         'error
         (let ((binding-val (car (cdr var-binding))))
           binding-val))))
 
-;;;; Just a place holder at the moment
-(define ( beval-and expr env)
-  (eq? expr #t))
+(define (beval-and expr env)
+  (let ((boolean-expr (cdr expr)))
+    (if (null? boolean-expr)
+        #t
+        (let ((first-subexpr (car boolean-expr))
+              (second-subexpr (cdr boolean-expr)))
+          (and (beval first-subexpr env)
+               (beval-and (cons 'and second-subexpr) env))))))
+
   
 ;;;; Just a place holder at the moment
-(define ( beval-or expr env)
+(define (beval-or expr env)
   (eq? expr #t))
 
 ;;;; Just a place holder at the moment
-(define ( beval-not expr env)
+(define (beval-not expr env)
   (eq? expr #t))
 
 ;;;; Just a place holder at the moment  
-(define ( beval-imply expr env)
+(define (beval-imply expr env)
   (eq? expr #t))
 
 ;;;; Just a place holder at the moment  
-(define ( beval-equiv expr env)
+(define (beval-equiv expr env)
   (eq? expr #t))
 
 
@@ -123,8 +128,11 @@
 ;;;;   Sample Input       ;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;;; (beval #t ()) ;Value: #t  
+;;;; (beval #t ()) ;Value: #t
+;;;; (beval #f ()) ;Value: #f
 ;;;; (beval 'p '((p #t))) ;Value: #t  
+;;;; (beval 'p '((a #t) (p #f))) ;Value: #f
+;;;; (beval 'p '()) ;Value: error
 ;;;; (beval '(and #t p) '((p #t))) ;Value: #t  
 ;;;; (beval '(and p q r) '((p #t) (q #t) (r #t))) ;Value: #t  
 ;;;; (beval '(or p q r) '((p #t) (q #f) (r #f))) ;Value: #t  

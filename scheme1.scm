@@ -1,0 +1,10 @@
+(define (beval exp evn)
+	(cond
+	((boolean? exp) exp)
+	((symbol? exp) (lookup exp env))
+	((conjuct? exp) (beval-and exp evn))
+	((disjuct? exp) (beval-or exp evn))
+	((negation? exp) (beval-not exp env))
+	((implication? exp) (beval-imply exp evn))
+	((equivalence? exp) (beval-equiv exp env))
+	(else (error "beval:illegal syntax"))))

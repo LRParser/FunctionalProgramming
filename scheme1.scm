@@ -79,14 +79,18 @@
           (and (beval first-subexpr env)
                (beval-and (cons 'and second-subexpr) env))))))
 
-  
-;;;; Just a place holder at the moment
 (define (beval-or expr env)
-  (eq? expr #t))
+  (let ((boolean-expr (cdr expr)))
+    (if (null? boolean-expr)
+        #f
+        (let ((first-subexpr (car boolean-expr))
+              (second-subexpr (cdr boolean-expr)))
+          (or (beval first-subexpr env)
+              (beval-or (cons 'or second-subexpr) env))))))
 
-;;;; Just a place holder at the moment
 (define (beval-not expr env)
-  (eq? expr #t))
+  (let ((boolean-expr (car (cdr expr))))
+    (not (beval boolean-expr env))))
 
 ;;;; Just a place holder at the moment  
 (define (beval-imply expr env)
@@ -123,6 +127,7 @@
 
 (define (contains-only-false? list)
   (andmap false? list))
+
   
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;   Sample Input       ;;;;
@@ -135,7 +140,10 @@
 ;;;; (beval 'p '()) ;Value: error
 ;;;; (beval '(and #t p) '((p #t))) ;Value: #t  
 ;;;; (beval '(and p q r) '((p #t) (q #t) (r #t))) ;Value: #t  
-;;;; (beval '(or p q r) '((p #t) (q #f) (r #f))) ;Value: #t  
+;;;; (beval '(or p q r) '((p #t) (q #f) (r #f))) ;Value: #t
+;;;; (beval '(not p) '((p #t))) ;Value: #f
+;;;; (beval '(not p) '((p #f))) ;Value: #t
+;;;; (beval '(not (or p q r)) '((p #f) (q #f) (r #f))) ;Value: #t
 ;;;; (beval '(imply p q) '((p #t) (q #f))) ;Value: #f  
 ;;;; (beval '(imply p q) '((p #t) (q #t))) ;Value: #t  
 ;;;; (beval '(equiv (imply p q) (or (not p) q)) '((p #t) (q #f))) ;Value: #t 

@@ -5,6 +5,8 @@
    (newline)
    readtext)
 
+; Begin ASSIGN
+
 (define symboltable (make-string-hash-table 100))
 
 (define assign
@@ -13,13 +15,23 @@
 
 (define none (string 'none))
 
+(define null '())
+
 (define eval-ident
   (lambda (identifier)
     (hash-table/get symboltable identifier none)))
 
+; END Assign 
+
+; BEGIN MATH
+
 (define plus?
   (lambda (expr)
     (eq? expr '+)))
+
+(define plus-expr?
+	  (lambda (expr) 
+	    (plus? (parse-operator expr))))
 
 (define minus?
   (lambda (expr)
@@ -33,13 +45,21 @@
 	 (lambda(x) (car (cadr x))))
 
 (define (eval-plus expr)
-  (define parsedexpr (car (cadr expr)))
-  (let ((operator (car expr))
-    (arg1 (car parsedexpr))
+  (define parsedexpr (cadr expr))
+  (let ((operator (parse-operator expr))
     (arg2 (cadr parsedexpr))
     (arg3 (caddr parsedexpr)))
   (+ arg2 arg3)
   )
+)
+
+(define eval-expr
+  (lambda (expr)
+    (cond
+     ( (plus-expr? expr) #t)
+     (else #f)
+     )
+    )
 )
 
 (define ( eval-minus expr)
@@ -50,6 +70,13 @@
   (- arg2 arg3)
   )
 )
+; END Math
+
+(define make-stmtseq
+  (lambda (stmt stmtseq)
+    (cons stmt stmtseq)))
+
+
 
 (define ( eval-times expr)
  (let ((operator (car expr))
@@ -62,9 +89,10 @@
 
 
 
-(define plus-expr?
-	  (lambda (expr) 
-	    (plus? (parse-expr expr))))
+
+(define read-input
+  (lambda (expr)
+    (delay expr)))
 
 ; Example usagee:
 ;48 error> (define f2 (read))

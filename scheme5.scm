@@ -7,6 +7,16 @@
 
 (define symboltable (make-string-hash-table 100))
 
+(define assign
+  (lambda (identifier expr)
+    (hash-table/put! symboltable identifier expr)))
+
+(define none (string 'none))
+
+(define eval-ident
+  (lambda (identifier)
+    (hash-table/get symboltable identifier none)))
+
 (define plus?
   (lambda (expr)
     (eq? expr '+)))
@@ -49,6 +59,8 @@
   (* arg2 arg3)
   )
 )
+
+
 
 (define plus-expr?
 	  (lambda (expr) 

@@ -65,7 +65,11 @@
 
 ;;;; Just a place holder at the moment
 (define ( lookup expr env)
-  (eq? expr #t))
+  (let ((var-binding (assoc expr env)))
+    (if (eq? var-binding #f)
+        'error
+        (let ((binding-val (car (cdr var-binding))))
+          binding-val))))
 
 ;;;; Just a place holder at the moment
 (define ( beval-and expr env)

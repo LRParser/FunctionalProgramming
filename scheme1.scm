@@ -102,10 +102,17 @@
         #f
         #t)))
 
-;;;; Just a place holder at the moment  
 (define (beval-equiv expr env)
-  (eq? expr #t))
-
+  (let* ((boolean-expr (cdr expr))
+         (first-subexpr (car boolean-expr))
+         (first-result (beval first-subexpr env))
+         (second-subexpr (car (cdr boolean-expr)))
+         (second-result (beval second-subexpr env)))
+    (if (and first-subexpr second-subexpr)
+        #t
+        (if (and (not first-subexpr) (not second-subexpr))
+            #t
+            #f))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;   Helper Functions   ;;;;
@@ -154,7 +161,8 @@
 ;;;; (beval '(imply p q) '((p #t) (q #t))) ;Value: #t  
 ;;;; (beval '(imply p q) '((p #f) (q #f))) ;Value: #t
 ;;;; (beval '(imply p q) '((p #f) (q #t))) ;Value: #t
-;;;; (beval '(equiv (imply p q) (or (not p) q)) '((p #t) (q #f))) ;Value: #t 
+;;;; (beval '(equiv (imply p q) (or (not p) q)) '((p #t) (q #f))) ;Value: #t
+;;;; (beval '(equiv (imply p q) (imply q p)) '((p #t) (q #f))) ;Value: t
 ;;;; (contains-only-true? '(#t #f #t #t #t))
   
   

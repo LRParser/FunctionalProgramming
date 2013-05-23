@@ -310,6 +310,10 @@
         (list 'cons cons)
         (list 'null? null?)
 ;;      more primitives
+	(list '+ +)
+	(list '- -)
+	(list '= =)
+	(list '* *)
         ))
 
 (define (primitive-procedure-names)
@@ -355,7 +359,7 @@
 
 ;;;Following are commented out so as not to be evaluated when
 ;;; the file is loaded.
-;;(define the-global-environment (setup-environment))
-;;(driver-loop)
+(define the-global-environment (setup-environment))
+(driver-loop)
 
 'METACIRCULAR-EVALUATOR-LOADED

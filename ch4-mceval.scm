@@ -27,7 +27,7 @@
          (make-procedure (lambda-parameters exp)
                          (lambda-body exp)
                          env))
-        ((begin? exp) 
+        ((begin? exp)
          (eval-sequence (begin-actions exp) env))
         ((cond? exp) (eval (cond->if exp) env))
         ((application? exp)
@@ -306,6 +306,11 @@
         (list 'cons cons)
         (list 'null? null?)
 ;;      more primitives
+;; for part 3
+	(list '+ +)
+	(list '- -)
+	(list '= =)
+	(list '* *)
         ))
 
 (define (primitive-procedure-names)

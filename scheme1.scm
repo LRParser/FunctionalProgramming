@@ -146,23 +146,30 @@
 ;;;;   Sample Input       ;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;;; (beval #t ()) ;Value: #t
-;;;; (beval #f ()) ;Value: #f
-;;;; (beval 'p '((p #t))) ;Value: #t  
-;;;; (beval 'p '((a #t) (p #f))) ;Value: #f
-;;;; (beval 'p '()) ;Value: error
-;;;; (beval '(and #t p) '((p #t))) ;Value: #t  
-;;;; (beval '(and p q r) '((p #t) (q #t) (r #t))) ;Value: #t  
-;;;; (beval '(or p q r) '((p #t) (q #f) (r #f))) ;Value: #t
-;;;; (beval '(not p) '((p #t))) ;Value: #f
-;;;; (beval '(not p) '((p #f))) ;Value: #t
-;;;; (beval '(not (or p q r)) '((p #f) (q #f) (r #f))) ;Value: #t
-;;;; (beval '(imply p q) '((p #t) (q #f))) ;Value: #f  
-;;;; (beval '(imply p q) '((p #t) (q #t))) ;Value: #t  
-;;;; (beval '(imply p q) '((p #f) (q #f))) ;Value: #t
-;;;; (beval '(imply p q) '((p #f) (q #t))) ;Value: #t
-;;;; (beval '(equiv (imply p q) (or (not p) q)) '((p #t) (q #f))) ;Value: #t
-;;;; (beval '(equiv (imply p q) (imply q p)) '((p #t) (q #f))) ;Value: t
-;;;; (contains-only-true? '(#t #f #t #t #t))
+(define (run-test test-expression env)
+  (pp test-expression)
+  (write-string ";Value: ")
+  (write-line (eval test-expression env)))
+
+(let ((my-env (the-environment)))
+  (run-test '(beval #t '()) my-env) ;Value: #t
+  (run-test '(beval #f ()) my-env)  ;Value: #f
+  (run-test '(beval 'p '((p #t))) my-env)  ;Value: #t  
+  (run-test '(beval 'p '((a #t) (p #f))) my-env) ;Value: #f
+  (run-test '(beval 'p '()) my-env) ;Value: error
+  (run-test '(beval '(and #t p) '((p #t))) my-env) ;Value: #t  
+  (run-test '(beval '(and p q r) '((p #t) (q #t) (r #t))) my-env) ;Value: #t  
+  (run-test '(beval '(or p q r) '((p #t) (q #f) (r #f))) my-env) ;Value: #t
+  (run-test '(beval '(not p) '((p #t))) my-env) ;Value: #f
+  (run-test '(beval '(not p) '((p #f))) my-env) ;Value: #t
+  (run-test '(beval '(not (or p q r)) '((p #f) (q #f) (r #f))) my-env) ;Value: #t
+  (run-test '(beval '(imply p q) '((p #t) (q #f))) my-env) ;Value: #f  
+  (run-test '(beval '(imply p q) '((p #t) (q #t))) my-env) ;Value: #t  
+  (run-test '(beval '(imply p q) '((p #f) (q #f))) my-env) ;Value: #t
+  (run-test '(beval '(imply p q) '((p #f) (q #t))) my-env) ;Value: #t
+  (run-test '(beval '(equiv (imply p q) (or (not p) q)) '((p #t) (q #f))) my-env) ;Value: #t
+  (run-test '(beval '(equiv (imply p q) (imply q p)) '((p #t) (q #f))) my-env) ;Value: t
+  (run-test '(contains-only-true? '(#t #f #t #t #t)) my-env))
+
   
   

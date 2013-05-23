@@ -33,6 +33,10 @@
 
 ; BEGIN MATH
 
+
+(define parse-operator 
+	 (lambda(x) (car (cadr x))))
+
 (define plus?
   (lambda (expr)
     (eq? expr '+)))
@@ -57,8 +61,16 @@
   (lambda (expr)
     (times? (parse-operator expr))))
 
-(define parse-operator 
-	 (lambda(x) (car (cadr x))))
+
+(define ( eval-times expr)
+ (let ((operator (car expr))
+    (arg1 (car expr))
+    (arg2 (cadr expr))
+    (arg3 (caddr expr)))
+  (* arg2 arg3)
+  )
+)
+
 
 (define (eval-matharg arg)
   (cond
@@ -100,7 +112,7 @@
 (define eval-expr
   (lambda (expr)
     (cond
-     ( (plus-expr? expr) #t)
+     ( (math-expr? expr) (eval-mathexpr expr))
      (else #f)
      )
     )
@@ -109,27 +121,59 @@
 
 ; END Math
 
+; Begin Stmt
+
+(define eval-stmt
+  (lambda (stmt)
+    (cond
+     ( (while-expr? expr) (eval-while expr))
+     ( (if-expr? expr) (eval-if expr))
+     ( (assign-expr? expr) (eval-assign expr))
+     ( else #f))))
+
+; Begin StmtList
+
 (define make-stmtseq
   (lambda (stmt stmtseq)
-    (cons stmt stmtseq)))
+    (vector stmt stmtseq)))
 
+(define car-stmtlist
+  (lambda (stmtlist)
+    (cadr stmtlist)))
 
+(define eval-stmtlist
+  (lambda (sl)
+    (vector-map eval-stmt sl)))
 
-(define ( eval-times expr)
- (let ((operator (car expr))
-    (arg1 (car expr))
-    (arg2 (cadr expr))
-    (arg3 (caddr expr)))
-  (* arg2 arg3)
-  )
-)
+; End StmtList
 
+; Begin While
 
-
-
-(define read-input
+(define while?
   (lambda (expr)
-    (delay expr)))
+    (eq? (car (cadr expr)) 'while)))
+
+(define while-expr?
+  (lambda (expr)
+    (while? (parse-operator expr))))
+
+(define while-cond
+  (lambda (expr)
+    (cadr (cadr expr))))  ; Get the condition associated with the while
+
+(define while-stmtlist
+  (lambda (expr)
+    (car (cdr (cdr (cadr w)))))) ; Get the stmtlist associated with the while
+
+(define eval-while
+  (lambda (expr)
+    (define cond (while-cond expr))
+    (define sl (while-stmtlist expr))
+    (unless? (eq? 0 (eval-math cond))
+	     (eval-stmtlist sl))))
+	    
+
+
 
 ; Example usagee:
 ;48 error> (define f2 (read))

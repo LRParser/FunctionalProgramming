@@ -29,6 +29,16 @@
   (lambda (identifier)
     (string? identifier)))
 
+(define assign-stmt?
+  (lambda (stmt)
+    (eq? (car (cadr stmt)) 'assign)))
+
+(define eval-assign
+  (lambda (assignstmt)
+    (define ident (cadr (cadr assignstmt)))
+    (define val (car (cdr (cdr (cadr assignstmt)))))
+    (assign (string ident) val)))
+
 ; END Assign 
 
 ; BEGIN MATH
@@ -94,7 +104,7 @@
   (cond
    ( (number? expr) expr)
    ( (plus-expr? expr) (eval-plus expr) )
-   ( (minus-expr? expr) (eval-minus expr) )
+   ( (minus-expr? expr) (eval-minusnew expr) )
    ( (times-expr? expr) (eval-times expr) )
    (else #f)
    )
@@ -105,6 +115,10 @@
 
 (define (eval-minus expr)
   (eval-math expr -))
+
+(define eval-minusnew
+  (lambda (arg1 arg2)
+    (- (eval-matharg arg1) (eval-matharg arg2))))
 
 (define (eval-times expr)
   (eval-math expr *))
@@ -126,9 +140,9 @@
 (define eval-stmt
   (lambda (stmt)
     (cond
-     ( (while-expr? expr) (eval-while expr))
-     ( (if-expr? expr) (eval-if expr))
-     ( (assign-expr? expr) (eval-assign expr))
+     ( (while-stmt? stmt) (eval-while stmt))
+     ( (if-stmt? stmt) (eval-if stmt))
+     ( (assign-stmt? stmt) (eval-assign stmt))
      ( else #f))))
 
 ; Begin StmtList
@@ -172,8 +186,32 @@
     (unless? (eq? 0 (eval-math cond))
 	     (eval-stmtlist sl))))
 	    
+(define (while cond . args)
+  ( (unless? (eq? cond 0)
+	     (for-each
+	      (lambda(x) (eval-stmt x)) args))))
 
+; Begin If
 
+(define eval-if
+  (lambda (ifcond truelist falselist)
+    (cond
+     ( (eq? 0 (eval-matharg ifcond)) (eval-stmtlist truelist))
+     ( else (eval-stmtlist falselist)))))
+
+; End If
+
+; Begin while tests
+
+(define i (string 'i))
+(assign i 5)
+
+(define f '(quote (+ 1 2) ))
+(define g '(quote (+ 3 5) ))
+(define assignstmt1 '(quote (assign j 10)))
+(define assignstmt2 '(quote (assign j 11)))
+(define stmtlist '(quote ((assign j 10) (assign j 11))))
+(define ifstmt '(quote if f ((assign j 10) (assign j 11))))
 
 ; Example usagee:
 ;48 error> (define f2 (read))

@@ -58,7 +58,7 @@
   (let ((expr (cadr stmt))
         (S1 (caddr stmt))
         (S2 (cadddr stmt)))
-    (if (eval-expr expr env)
+    (if (not (< (eval-expr expr env) 1))
         (eval-stmtlist S1 env)
         (eval-stmtlist S2 env))))
 

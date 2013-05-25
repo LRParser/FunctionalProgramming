@@ -111,3 +111,30 @@
 ;;; Lookup the binding and return the value, returns "none" if not found
 (define (lookup-binding var env)
   (hash-table/get env var none))
+
+;;; expr evaluator
+(define (eval-expr expr env)
+  (if (list? expr)
+      (cond    
+       ((plus-expr? expr) (eval-plus expr env))
+       ((minus-expr? expr) (eval-minus expr env))
+       (else (eval-term expr env)))
+      (eval-term expr env)))
+
+;;; term evaluator
+(define (eval-term expr env)
+  (if (list? expr)
+      (if (times-expr? expr)
+          (eval-times expr env)
+          (eval-factor expr env))
+      (eval-factor expr env)))
+
+;;; factor evaluator
+(define (eval-factor expr env)
+  (cond
+   ((list? expr) (let ((factor (car expr)))
+                   (eval-factor factor env)))
+   ((ident? expr) (eval-ident expr env))
+   ((number? expr) expr)
+   (else #f)))
+

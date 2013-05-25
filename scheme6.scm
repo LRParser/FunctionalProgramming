@@ -111,3 +111,6 @@
 ;;; Lookup the binding and return the value, returns "none" if not found
 (define (lookup-binding var env)
   (hash-table/get env var none))
+
+;; Display a nice done message when loaded
+'MINI-LANGUAGE-INTERPRETER-LOADED

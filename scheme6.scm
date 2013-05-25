@@ -138,6 +138,24 @@
    ((number? expr) expr)
    (else #f)))
 
+;;; plus-expr? predicate
+(define (plus-expr? expr)
+  (if (eq? (car expr) '+)
+      #t
+      #f))
+
+;;; minus-expr? predicate
+(define (minus-expr? expr)
+  (if (eq? (car expr) '-)
+      #t
+      #f))
+
+;;; times-expr? predicate
+(define (times-expr? expr)
+  (if (eq? (car expr) '*)
+      #t
+      #f))
+
 ;; Display a nice done message when loaded
 'MINI-LANGUAGE-INTERPRETER-LOADED
 

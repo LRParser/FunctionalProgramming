@@ -3,7 +3,7 @@
 
 (define iftest1
   '((assign i 5)
-    (if i ((1)) ((0)))))
+    (if i ((assign return 1)) ((assign return 0)))))
 
 
 (meval iftest1)

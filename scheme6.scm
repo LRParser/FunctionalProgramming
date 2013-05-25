@@ -5,8 +5,8 @@
 ;;;;    Purpose:    Implements an interpreter for the mini-language using scheme.
 ;;;;                Grammar details below:
 ;;;;
-;;;;                    < prog > ? stmtlist
-;;;;                < stmtlist > ? stmt stmtlist | stmt
+;;;;                    < prog > ? (stmtlist)
+;;;;                < stmtlist > ? (stmt stmtlist) | (stmt)
 ;;;;                    < stmt > ? assign_stmt | if_stmt | while_stmt
 ;;;;             < assign_stmt > ? (assign id expr)
 ;;;;                 < if_stmt > ? (if expr stmtlist stmtlist)

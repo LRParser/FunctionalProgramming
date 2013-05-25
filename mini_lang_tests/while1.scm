@@ -8,8 +8,8 @@
 (define while1
   '((assign i 5)
     (assign j 0)
-    (while (i)
-	   (begin (assign i (- i 1))
-		  (assign j (+ j 1))))))
+    (while i
+	   ((assign i (- i 1))
+            (assign j (+ j 1))))))
 
 (meval while1)

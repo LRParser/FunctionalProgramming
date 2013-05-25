@@ -212,7 +212,8 @@
 (define assignstmt2 '(quote (assign j 11)))
 (define stmtlist '(quote ((assign j 10) (assign j 11))))
 (define ifstmt '(quote if f ((assign j 10) (assign j 11))))
-
+(plus-expr? f)
+(eval-mathexpr f)
 ; Example usagee:
 ;48 error> (define f2 (read))
 ;'(+ 1 2)

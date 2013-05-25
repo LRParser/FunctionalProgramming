@@ -156,6 +156,24 @@
       #t
       #f))
 
+;;; plus-expr evaluator
+(define (eval-plus expr env)
+  (let ((first-arg (eval-expr (cadr expr) env))
+        (second-arg (eval-term (caddr expr) env)))
+    (+ first-arg second-arg)))
+
+;;; minus-expr evaluator
+(define (eval-minus expr env)
+  (let ((first-arg (eval-expr (cadr expr) env))
+        (second-arg (eval-term (caddr expr) env)))
+    (- first-arg second-arg)))
+
+;;; times-expr evaluator
+(define (eval-times expr env)
+  (let ((first-arg (eval-term (cadr expr) env))
+        (second-arg (eval-factor (caddr expr) env)))
+    (* first-arg second-arg)))
+
 ;; Display a nice done message when loaded
 'MINI-LANGUAGE-INTERPRETER-LOADED
 

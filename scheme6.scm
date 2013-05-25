@@ -121,8 +121,10 @@
 
 ;;; Lookup the binding and return the value, returns "none" if not found
 (define (lookup-binding var env)
-  (pp (hash-table->alist env))
-  (hash-table/get env var none))
+  (let ((binding (hash-table/get env var 'none)))
+    (if (eq? binding 'none)
+        (error "unbound variable")
+        binding)))
 
 ;;; expr evaluator
 (define (eval-expr expr env)

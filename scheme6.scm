@@ -138,3 +138,6 @@
    ((number? expr) expr)
    (else #f)))
 
+;; Display a nice done message when loaded
+'MINI-LANGUAGE-INTERPRETER-LOADED
+

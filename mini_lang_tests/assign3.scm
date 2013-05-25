@@ -2,8 +2,8 @@
 ;; f := 2;
 ;; f := 1
 
-(define prog '((assign f 1)
-	       (assign f 2)
-	       (assign f 1)))
+(define assign3 '((assign f 1)
+		  (assign f 2)
+		  (assign f 1)))
 
-(meval prog)
+(meval assign3)

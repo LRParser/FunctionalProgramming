@@ -1,3 +1,3 @@
-(define prog '((assign n 5)))
+(define assign2 '((assign n 5)))
 
-(meval prog)
+(meval assign2)

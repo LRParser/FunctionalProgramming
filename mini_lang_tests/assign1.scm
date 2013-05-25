@@ -1,4 +1,4 @@
-(define prog '((assign f 4)
-	       (assign g f)))
+(define assign1 '((assign f 4)
+		  (assign g f)))
 
-(meval prog)
+(meval assign1)

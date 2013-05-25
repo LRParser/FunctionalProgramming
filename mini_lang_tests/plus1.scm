@@ -1,5 +1,5 @@
 ;;x := (1 + 5 + 8)
 
-(define prog '((assign x (+ 1 5 8))))
+(define plus1 '((assign x (+ 1 5 8))))
 
-(meval prog)
+(meval plus1)

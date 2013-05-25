@@ -134,8 +134,8 @@
   (cond
    ((list? expr) (let ((factor (car expr)))
                    (eval-factor factor env)))
-   ((ident? expr) (eval-ident expr env))
    ((number? expr) expr)
+   ((ident? expr) (eval-ident expr env))
    (else #f)))
 
 

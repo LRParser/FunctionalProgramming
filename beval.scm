@@ -139,9 +139,9 @@
          (first-result (beval first-subexpr env))
          (second-subexpr (car (cdr boolean-expr)))
          (second-result (beval second-subexpr env)))
-    (if (and first-subexpr second-subexpr)
+    (if (and first-result second-result)
         #t
-        (if (and (not first-subexpr) (not second-subexpr))
+        (if (and (not first-result) (not second-result))
             #t
             #f))))
   

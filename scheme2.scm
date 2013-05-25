@@ -189,8 +189,9 @@
   (run-test '(tautology-prover '(equiv(or(not p) p) #t)) my-env);Value: #t
 
   ; Contradiction - http://people.math.gatech.edu/~ecroot/2406_2012/basic_logic.pdf
-  (run-test '(tautology-prover '(equiv(and(not p) p) #f)) my-env);Value: #f - TODO - PJD, need to see why.  Though this should be true...
+  (run-test '(tautology-prover '(equiv(and(not p) p) #f)) my-env);Value: #t
 
   ; Equivalence - http://people.math.gatech.edu/~ecroot/2406_2012/basic_logic.pdf
   (run-test '(tautology-prover '(equiv(and(imply p q)(imply q p))(equiv p q))) my-env);Value: #t
 )
+

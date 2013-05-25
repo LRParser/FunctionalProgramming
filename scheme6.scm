@@ -152,7 +152,7 @@
                    (eval-factor factor env)))
    ((number? expr) expr)
    ((ident? expr) (eval-ident expr env))
-   (else #f)))
+   (else 0)))
 
 
 ;;; ident predicate

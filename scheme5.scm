@@ -41,14 +41,14 @@
 
 (define assign-stmt?
   (lambda (stmt)
-    (eq? (car (cadr stmt)) 'assign)))
+    (eq? (car (parse-expr stmt)) 'assign)))
 
 (define eval-assign
   (lambda (assignstmt)
-    (define ident (cadr (cadr assignstmt)))
-    (define val (car (cdr (cdr (cadr assignstmt)))))
+    (define parsedexpr (parse-expr assignstmt))
+    (define ident (cadr parsedexpr))
+    (define val (car (cdr (cdr parsedexpr))))
     (assign (string ident) val)))
-
 ; END Assign
 
 ; BEGIN MATH
@@ -98,8 +98,11 @@
    ( (number? arg) arg)
    ( else #f)))
 
+(define (parse-expr expr)
+  (car expr))
+
 (define (eval-math expr op)
-  (define parsedexpr (car expr))
+  (define parsedexpr (parse-expr expr))
   (let ((operator (parse-operator expr))
     (arg2   (eval-matharg (cadr parsedexpr)) )
     (arg3   (eval-matharg (caddr parsedexpr)) ))

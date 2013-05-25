@@ -65,7 +65,7 @@
 ;;; whilestmt evaluator - provided by Dr Johnson
 (define (eval-while stmt env)
   (define (loop expr S env)
-    (if (not (eq? (eval-expr expr env) 0))
+    (if (not (< (eval-expr expr env) 1))
         (loop expr S (eval-stmtlist S env))
         env))
   (let ((expr (cadr stmt))

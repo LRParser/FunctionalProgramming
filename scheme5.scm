@@ -1,3 +1,13 @@
+;; Grammar, for reference
+;; 1. prog -> stmt-list
+;; 2. stmt-list -> (stmt-seq)
+;; 3. stmt-seq -> stmt | stmt stmt-seq
+;; 4. stmt -> assign-stmt | if-stmt | while-stmt
+;; 5. assign-stmt -> (assign identifier expr)
+;; 6. if-stmt -> (if expr stmt-list stmt-list)
+;; 7. while-stmt -> (while expr stmt-list)
+;; 8. expr -> integer | identifier | (+ expr expr) | (- expr expr) | (* expr expr)
+
 (define (string-input)
    (display "Enter expression: ")
    (define readtext (string (read)))
@@ -39,12 +49,12 @@
     (define val (car (cdr (cdr (cadr assignstmt)))))
     (assign (string ident) val)))
 
-; END Assign 
+; END Assign
 
 ; BEGIN MATH
 
 
-(define parse-operator 
+(define parse-operator
 	 (lambda(x) (car (cadr x))))
 
 (define plus?
@@ -52,7 +62,7 @@
     (eq? expr '+)))
 
 (define plus-expr?
-	  (lambda (expr) 
+	  (lambda (expr)
 	    (plus? (parse-operator expr))))
 
 (define minus?
@@ -185,7 +195,7 @@
     (define sl (while-stmtlist expr))
     (unless? (eq? 0 (eval-math cond))
 	     (eval-stmtlist sl))))
-	    
+
 (define (while cond . args)
   ( (unless? (eq? cond 0)
 	     (for-each
@@ -227,4 +237,3 @@
 ;48 error> (define f2 (read))
 ;'(+ 1 2)
 ; (plus-expr? f2)
-

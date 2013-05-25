@@ -76,8 +76,19 @@
   (if (list? stmts)
       (if (null? stmts)
           #f ; empty-list - not valid
-          #t)
+          (verify-stmts stmts))
       #f)) ; not list - not valid
+
+;;; verify that the individual stmts are valid
+(define (verify-stmts stmts)
+  (if (null? stmts)
+      #t
+      (let ((first-stmt (car stmts))
+            (rest (cdr stmts)))
+        (and (or (assign-stmt? first-stmt)
+                 (if-stmt? first-stmt)
+                 (while-stmt? first-stmt))
+             (verify-stmts rest)))))
 
 ;;; check whether the stmt is an assign stmt
 (define (assign-stmt? stmt)
@@ -141,13 +152,13 @@
 
 ;;; ident predicate
 (define (ident? expr)
-  (if (symbol? (car expr))
+  (if (symbol? expr)
       #t
       #f))
 
 ;;; ident evaluator
 (define (eval-ident expr env)
-  (lookup-binding (car expr) env))
+  (lookup-binding expr env))
 
 ;;; plus-expr? predicate
 (define (plus-expr? expr)

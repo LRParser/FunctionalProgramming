@@ -206,17 +206,23 @@
 (define i (string 'i))
 (assign i 5)
 
-(define f '(quote (+ 1 2) ))
-(define g '(quote (+ 3 5) ))
-(define assignstmt1 '(quote (assign j 10)))
-(define h '(quote (+ i j)))
-(define assignstmt2 '(quote (assign j 11)))
-(define stmtlist '(quote ((assign j 10) (assign j 11))))
-(define ifstmt '(quote if f ((assign j 10) (assign j 11))))
+(define f '( (+ 1 2) ))
+(define g '( (+ 3 5) ))
+(define assignstmt1 '( (assign j 10)))
+(define h '( (+ i j)))
+(define assignstmt2 '( (assign j 11)))
+(define stmtlist '( ((assign j 10) (assign j 11))))
+(define ifstmt '( if f ((assign j 10) (assign j 11))))
 (plus-expr? f)
 (eval-mathexpr f)
 (eval-assign assignstmt1)
 (eval-mathexpr h)
+(eval-expr h)
+
+; Begin PROF Example
+
+(define assignprof '((asign n (0 - 5))))
+
 ; Example usagee:
 ;48 error> (define f2 (read))
 ;'(+ 1 2)

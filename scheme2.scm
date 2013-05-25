@@ -23,9 +23,33 @@
 ;; all #t
 (define (tautology-prover tautology)
   (let* ((symbols (find-variables tautology))
-         (envs (generate-envs symbols '())))
-    (pp symbols)
-    (pp envs)))
+         (envs (generate-envs symbols '()))
+         (results (map (tautology-map tautology) envs)))
+    (if (all-true? results)
+        (begin (write-string "Tautology ")
+               (write tautology)
+               (write-string " proven.")
+               (newline)
+               #t)
+        (begin
+          (write tautology)
+          (write-string " is not a tautology.")
+          (newline)
+          #f))))
+
+;;; all-true? - checks a list to see if all values are the literal #t
+(define (all-true? list)
+  (if (null? list)
+      #t
+      (let ((first-element (car list))
+            (rest (cdr list)))
+        (and (eq? first-element #t)
+             (all-true? rest)))))
+
+
+;;; tautology-map - returns a HOF that is usable by map against the envs
+(define (tautology-map tautology)
+  (lambda (x) (beval tautology x)))
 
 
 ;; takes a list potentially containing sub-lists and
@@ -62,7 +86,7 @@
 (define (unique list)
   (if (null? list)
       '()
-      (let ((seen-symbols (uniq (cdr list)))
+      (let ((seen-symbols (unique (cdr list)))
             (first-symbol (car list)))
         (if (not (memq first-symbol seen-symbols))
             (cons first-symbol seen-symbols)
@@ -113,6 +137,9 @@
   (write-line (eval test-expression env)))
 
 (let ((my-env (the-environment)))
-  (run-test '(tautology-prover '(or p (not p))) my-env))  ;Value: #t  
+  (run-test '(tautology-prover '(or p (not p))) my-env) ;Value: #t
+  (run-test '(tautology-prover '(equiv (or p q) (or q p))) my-env) ;Value: #t
+  (run-test '(tautology-prover '(equiv (or P Q) (or P (and (not P) Q)))) my-env) ;Value: #t
+  (run-test '(tautology-prover '(and a b)) my-env)) ;Value: #f
 
   

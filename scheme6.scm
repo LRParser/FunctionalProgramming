@@ -28,7 +28,9 @@
 (define (meval prog)
   (let ((env (initial-environment)))
     (if (stmtlist? prog)
-        (pp (hash-table->alist (eval-stmtlist prog env)))
+        (begin
+          (pp (hash-table->alist (eval-stmtlist prog env)))
+          'ok)
         (error "illegal program"))))
 
 ;;; stmtlist evaluator - provided by Dr Johnson

@@ -6,4 +6,4 @@
     (if i ((1)) ((0)))))
 
 
-(meval iftest1.scm)
+(meval iftest1)

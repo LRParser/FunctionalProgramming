@@ -55,7 +55,7 @@
 
 
 (define parse-operator
-	 (lambda(x) (car (cadr x))))
+	 (lambda(x) (car (car x))))
 
 (define plus?
   (lambda (expr)
@@ -99,7 +99,7 @@
    ( else #f)))
 
 (define (eval-math expr op)
-  (define parsedexpr (cadr expr))
+  (define parsedexpr (car expr))
   (let ((operator (parse-operator expr))
     (arg2   (eval-matharg (cadr parsedexpr)) )
     (arg3   (eval-matharg (caddr parsedexpr)) ))

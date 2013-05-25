@@ -55,7 +55,7 @@
 
 
 (define parse-operator
-	 (lambda(x) (car (cadr x))))
+	 (lambda(x) (car (car x))))
 
 (define plus?
   (lambda (expr)

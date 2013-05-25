@@ -115,7 +115,7 @@
 ;;; expr evaluator
 (define (eval-expr expr env)
   (if (list? expr)
-      (cond    
+      (cond
        ((plus-expr? expr) (eval-plus expr env))
        ((minus-expr? expr) (eval-minus expr env))
        (else (eval-term expr env)))
@@ -138,6 +138,17 @@
    ((number? expr) expr)
    (else #f)))
 
+
+;;; ident predicate
+(define (ident? expr)
+  (if (symbol? (car expr))
+      #t
+      #f))
+
+;;; ident evaluator
+(define (eval-ident expr env)
+  (lookup-binding (car expr) env))
+
 ;;; plus-expr? predicate
 (define (plus-expr? expr)
   (if (eq? (car expr) '+)
@@ -158,4 +169,3 @@
 
 ;; Display a nice done message when loaded
 'MINI-LANGUAGE-INTERPRETER-LOADED
-

@@ -70,9 +70,6 @@
         (S (caddr stmt)))
     (loop expr S env)))
 
-;;; set up the initial environment
-(define (initial-environment)
-  '())
 
 ;;; verify that the stmtlist is valid
 (define (stmtlist? stmts)
@@ -100,10 +97,17 @@
       #t
       #f))
 
+;; Environment functions
+;;; set up the initial environment
+(define (initial-environment)
+  (make-equal-hash-table 100))
 
+;;;Insert the binding into the current envirnoment and return the updated hash
+;;;table
+(define (insert-binding var val env)
+  (begin (hash-table/put! env var val)
+	 env))
 
-
-
-
-
-
+;;; Lookup the binding and return the value, returns "none" if not found
+(define (lookup-binding var env)
+  (hash-table/get env var none))

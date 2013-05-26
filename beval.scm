@@ -1,8 +1,10 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;; Implements an interpreter for the proposition calculus using scheme.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;; Implements an interpreter for the proposition calculus using
+;;;; scheme. 
 ;;;;
 ;;;;    Name:       scheme1.scm
-;;;;    Purpose:    Implements an interpreter for the proposition calculus using scheme.
+;;;;    Purpose:    Implements an interpreter for the proposition
+;;;;                calculus using scheme. 
 ;;;;                Grammar details below:
 ;;;;
 ;;;;		    < boolexp > ? #t | #f [boolean constants]
@@ -10,10 +12,14 @@
 ;;;;		    < boolexp > ? (and boolexp ... boolexp)
 ;;;;		    < boolexp > ? (or boolexp ... boolexp)
 ;;;;		    < boolexp > ? (not boolexp)
-;;;;		    < boolexp > ? (implies boolexp boolexp) [P => Q, where P is the first 
-;;;;							   argument and Q is the second argument]
-;;;;		    < boolexp > ? (equiv boolexp boolexp) [P <=> Q, where P is the first 
-;;;;							   argument and Q is the second argument] 
+;;;;		    < boolexp > ? (implies boolexp boolexp) 
+;;;;                              [P => Q, where P is the first
+;;;;                              argument and Q is the second
+;;;;                              argument] 
+;;;;		    < boolexp > ? (equiv boolexp boolexp) 
+;;;;                              [P <=> Q, where P is the first
+;;;;                              argument and Q is the second
+;;;;                              argument]  
 ;;;;
 ;;;;    Authors:    Jon Boone
 ;;;;		    Joshua Datko
@@ -21,7 +27,7 @@
 ;;;;		    Joseph Heenan
 ;;;;
 ;;;;    Created:    05/21/2013
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

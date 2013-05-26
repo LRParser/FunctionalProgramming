@@ -8,64 +8,85 @@ ________________
 OVERVIEW: Assignment #5
 ________________
 
-This assignment is broken into 5 parts detailed below. 
+This assignment is broken into 5 parts detailed below.
 
-1.) Implements an interpreter for the proposition calculus using scheme following the syntax below:  
-        < boolexp > → #t | #f [boolean constants]
-        < boolexp > → variable [boolean variables]
-        < boolexp > → (and boolexp ... boolexp)
-        < boolexp > → (or boolexp ... boolexp)
-        < boolexp > → (not boolexp)
-        < boolexp > → (implies boolexp boolexp) [P => Q, where P is the first argument and Q is the second argument]
-        < boolexp > → (equiv boolexp boolexp) [P <=> Q, where P is the first argument and Q is the second argument] 
-		
-	Your interpreter should take a boolean expression and an environment and return #t or #f. If an undefined variable is 
-	encountered then return the symbol error. Your interpreter should first transform boolean operators (and and or) with 
-	more than two arguments to nested operators with just two arguments (similar to the way cond is handled in the scheme interpreter).	
-	
-2.) Use your boolean expression interpreter from question 1 to prove tautologies. I.E. a boolean expression that is 
-	true for all possible values of the variables. E.G. (or P (not P)), (equiv (or P Q) (or Q P)), 
-	(equiv (or P Q) (or P (and (not P) Q))). Your prover should generate all possible values for the variables occuring in the 
-	boolean expression [all possible bindings], and using your interpreter, check to verify that the expression is true for all possible variable bindings.
+1.) Implements an interpreter for the proposition calculus using scheme
+following the syntax below:
 
-3.) Trace scheme interpreter from SICP using as input the following two expressions [you will have to add =, *, - as primitive procedures for this to work].
+    < boolexp > → #t | #f [boolean constants]
+    < boolexp > → variable [boolean variables]
+    < boolexp > → (and boolexp ... boolexp)
+    < boolexp > → (or boolexp ... boolexp)
+    < boolexp > → (not boolexp)
+    < boolexp > → (implies boolexp boolexp)
+                  [P => Q, where P is the first argument and Q is the second argument]
+    < boolexp > → (equiv boolexp boolexp)
+                  [P <=> Q, where P is the first argument and Q is the second argument]
+
+Your interpreter should take a boolean expression and an environment and return
+#t or #f. If an undefined variable is encountered then return the symbol
+error. Your interpreter should first transform boolean operators (and and or)
+with more than two arguments to nested operators with just two arguments
+(similar to the way cond is handled in the scheme interpreter).
+
+2.) Use your boolean expression interpreter from question 1 to prove
+tautologies. I.E. a boolean expression that is true for all possible values of
+the variables. E.G. (or P (not P)), (equiv (or P Q) (or Q P)), (equiv (or P Q)
+(or P (and (not P) Q))). Your prover should generate all possible values for
+the variables occuring in the boolean expression [all possible bindings], and
+using your interpreter, check to verify that the expression is true for all
+possible variable bindings.
+
+3.) Trace scheme interpreter from SICP using as input the following two
+expressions [you will have to add =, *, - as primitive procedures for this to
+work].
+
           (define (fact n)
              (if (= n 0) 1 (* n (fact (- n 1)))))
           (fact 3)
-          
+
     You should indicate exactly how the interpreter interprets this code.
-	
-4.) Modify the SICP interpreter to use dynamic instead of static scope. Provide an example where the same code provides two different 
-	answers depending on which scoping rule is used.
-    
-5.) Implement an interpreter for the mini language in scheme. Use the following representation for mini language programs.
-        prog -> stmt-list
-        stmt-list -> (stmt-seq)
-        stmt-seq -> stmt | stmt stmt-seq
-        stmt -> assign-stmt | if-stmt | while-stmt
-        assign-stmt -> (assign identifier expr)
-        if-stmt -> (if expr stmt-list stmt-list)
-        while-stmt -> (while expr stmt-list)
-        expr -> integer | identifier | (+ expr expr) | (- expr expr) | (* expr expr) 
+
+4.) Modify the SICP interpreter to use dynamic instead of static scope. Provide
+an example where the same code provides two different answers depending on
+which scoping rule is used.
+
+5.) Implement an interpreter for the mini language in scheme. Use the following
+representation for mini language programs.
+
+    prog -> stmt-list
+    stmt-list -> (stmt-seq)
+    stmt-seq -> stmt | stmt stmt-seq
+    stmt -> assign-stmt | if-stmt | while-stmt
+    assign-stmt -> (assign identifier expr)
+    if-stmt -> (if expr stmt-list stmt-list)
+    while-stmt -> (while expr stmt-list)
+    expr -> integer | identifier | (+ expr expr) | (- expr expr) | (* expr expr)
 
 
 This package contains all of the files for Assignment #5.
 
 =======
-scheme1.scm		** Contains the implementation of an interpreter for the proposition calculus using scheme.
-scheme4.scm		** Contains the scheme code that modifies the SICP interpreter to use dynamic instead of static scope.
-scheme5.scm		** Contains the implementation of an interpreter for the mini language in scheme.
-			
+
+scheme1.scm		** Contains the implementation of an interpreter for
+			 the proposition calculus using scheme.
+
+scheme4.scm		** Contains the scheme code that modifies the SICP
+			 interpreter to use dynamic instead of static scope.
+
+scheme5.scm		** Contains the implementation of an interpreter for
+			 the mini language in scheme.
+
 makefile
 
-				TODO - List targets, etc that will be used in MakeFile
-                        
+			TODO - List targets, etc that will be used in MakeFile
+
 
 TEST FILES - Will be explained in detail below :
 ________________
 TODO - Document test files used.
 
-README				** This file. Contains details out how to run files, build, test, etc.
+README	** This file. Contains details out how to run files, build, test, etc.
 
 RUNNING: Assignment #5, Part #1
 ___________

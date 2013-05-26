@@ -16,9 +16,10 @@ MINI_LANG_TESTS=mini_lang_tests/
 
 run-mini-lang = cat $(MINI_LANG) $(1)| $(SCHEME) -batch-mode
 
-test:
+test-part-5:
 	@for file in $(MINI_LANG_TESTS)*; \
 	do                             \
+		echo "Running $$file"; \
 		$(call run-mini-lang, $$file); \
 	done;                          \
 

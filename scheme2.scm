@@ -180,7 +180,7 @@
   (run-test '(tautology-prover '(equiv(or(and p q)p) p)) my-env);Value: #t
 
   ; Implication Law - http://people.math.gatech.edu/~ecroot/2406_2012/basic_logic.pdf
-  (run-test '(tautology-prover '(equiv(imply p q)(not(or p q)))) my-env);Value: #t
+  (run-test '(tautology-prover '(equiv (imply p q) (or (not p) q))) my-env);Value: #t
 
   ; Contrapositive Law - http://people.math.gatech.edu/~ecroot/2406_2012/basic_logic.pdf
   (run-test '(tautology-prover '(equiv(imply p q)(imply(not q)(not p)))) my-env);Value: #t

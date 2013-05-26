@@ -68,18 +68,27 @@ This package contains all of the files for Assignment #5.
 
 =======
 
-scheme1.scm		** Contains the implementation of an interpreter for
-			 the proposition calculus using scheme.
+scheme1.scm
 
-scheme4.scm		** Contains the scheme code that modifies the SICP
-			 interpreter to use dynamic instead of static scope.
+Contains the implementation of an interpreter for the proposition calculus
+using scheme.
 
-scheme5.scm		** Contains the implementation of an interpreter for
-			 the mini language in scheme.
+scheme3.scm
+
+The solution for part 3 requires the
+
+scheme4.scm
+
+Contains the scheme code that modifies the SICP interpreter to use dynamic
+instead of static scope.
+
+scheme5.scm
+
+Contains the implementation of an interpreter for the mini language in scheme.
 
 makefile
 
-			TODO - List targets, etc that will be used in MakeFile
+=====
 
 
 TEST FILES - Will be explained in detail below :

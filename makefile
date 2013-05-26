@@ -7,7 +7,7 @@ SCHEME=scheme
 RELEASE_DIR=release
 RELEASE_FILE=$(ASSIGNMENT).tar.gz
 
-MINI_LANG=scheme6.scm
+MINI_LANG=scheme5.scm
 MINI_LANG_TESTS=mini_lang_tests/
 
 .PHONY : clean tags release test

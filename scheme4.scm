@@ -310,6 +310,7 @@
         (list 'cons cons)
         (list 'null? null?)
 ;;      more primitives
+;; for part 3
 	(list '+ +)
 	(list '- -)
 	(list '= =)
@@ -359,7 +360,7 @@
 
 ;;;Following are commented out so as not to be evaluated when
 ;;; the file is loaded.
-(define the-global-environment (setup-environment))
-(driver-loop)
+;;(define the-global-environment (setup-environment))
+;;(driver-loop)
 
 'METACIRCULAR-EVALUATOR-LOADED

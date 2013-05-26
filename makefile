@@ -31,3 +31,7 @@ release:
 	rm -rf $(ASSIGNMENT); \
 	mkdir $(TOP)/$(RELEASE_DIR); \
 	mv $(RELEASE_FILE) $(TOP)/$(RELEASE_DIR)
+
+.PHONY : view-part-4
+view-part-4:
+	@more scheme4.patch

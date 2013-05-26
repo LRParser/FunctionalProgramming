@@ -10,7 +10,7 @@ RELEASE_FILE=$(ASSIGNMENT).tar.gz
 MINI_LANG=scheme5.scm
 MINI_LANG_TESTS=mini_lang_tests/
 
-.PHONY : clean tags release test
+.PHONY : clean tags release test view-part-4 view-part-3
 
 # define the run-test function
 
@@ -32,6 +32,8 @@ release:
 	mkdir $(TOP)/$(RELEASE_DIR); \
 	mv $(RELEASE_FILE) $(TOP)/$(RELEASE_DIR)
 
-.PHONY : view-part-4
 view-part-4:
-	@more scheme4.patch
+	@more scheme4.patch dynamic_v_lexical.scm
+
+view-part-3:
+	@more scheme3.scm

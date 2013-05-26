@@ -10,8 +10,8 @@ ________________
 
 This assignment is broken into 5 parts detailed below.
 
-1.) Implements an interpreter for the proposition calculus using scheme
-following the syntax below:
+1.) Implements an interpreter for the proposition calculus using
+    scheme following the syntax below:
 
     < boolexp > → #t | #f [boolean constants]
     < boolexp > → variable [boolean variables]
@@ -19,27 +19,31 @@ following the syntax below:
     < boolexp > → (or boolexp ... boolexp)
     < boolexp > → (not boolexp)
     < boolexp > → (implies boolexp boolexp)
-                  [P => Q, where P is the first argument and Q is the second argument]
+                  [P => Q, where P is the first argument and Q is the
+                  second argument]   
     < boolexp > → (equiv boolexp boolexp)
-                  [P <=> Q, where P is the first argument and Q is the second argument]
+                  [P <=> Q, where P is the first argument and Q is the
+                  second argument]  
 
-Your interpreter should take a boolean expression and an environment and return
-#t or #f. If an undefined variable is encountered then return the symbol
-error. Your interpreter should first transform boolean operators (and and or)
-with more than two arguments to nested operators with just two arguments
-(similar to the way cond is handled in the scheme interpreter).
+  The interpreter takes a boolean expression and an environment and
+  returns either #t or #f. If an undefined variable is encountered
+  then the symbol error is returned.  The interpreter transform
+  boolean operators (and and or) with more than two arguments to
+  nested operators with just two arguments.
 
-2.) Use your boolean expression interpreter from question 1 to prove
-tautologies. I.E. a boolean expression that is true for all possible values of
-the variables. E.G. (or P (not P)), (equiv (or P Q) (or Q P)), (equiv (or P Q)
-(or P (and (not P) Q))). Your prover should generate all possible values for
-the variables occuring in the boolean expression [all possible bindings], and
-using your interpreter, check to verify that the expression is true for all
-possible variable bindings.
 
-3.) Trace scheme interpreter from SICP using as input the following two
-expressions [you will have to add =, *, - as primitive procedures for this to
-work].
+2.) Uses the boolean expression interpreter from question 1 to prove
+    tautologies. I.E. a boolean expression that is true for all
+    possible values of the variables. E.G. (or P (not P)), (equiv (or
+    P Q) (or Q P)), (equiv (or P Q) (or P (and (not P) Q))).  The
+    prover generates all possible values for the variables occuring in
+    the boolean expression [all possible bindings], and uses the
+    interpreter to verify that the expression is true for all possible
+    variable bindings. 
+
+3.) Trace scheme interpreter from SICP using as input the following
+    two expressions [you will have to add =, *, - as primitive
+    procedures for this to work]. 
 
           (define (fact n)
              (if (= n 0) 1 (* n (fact (- n 1)))))
@@ -47,12 +51,12 @@ work].
 
     You should indicate exactly how the interpreter interprets this code.
 
-4.) Modify the SICP interpreter to use dynamic instead of static scope. Provide
-an example where the same code provides two different answers depending on
-which scoping rule is used.
+4.) Modify the SICP interpreter to use dynamic instead of static
+    scope. Provide an example where the same code provides two
+    different answers depending on which scoping rule is used.
 
-5.) Implement an interpreter for the mini language in scheme. Use the following
-representation for mini language programs.
+5.) Implement an interpreter for the mini language in scheme. Use the
+    following representation for mini language programs.
 
     prog -> stmt-list
     stmt-list -> (stmt-seq)
@@ -61,17 +65,22 @@ representation for mini language programs.
     assign-stmt -> (assign identifier expr)
     if-stmt -> (if expr stmt-list stmt-list)
     while-stmt -> (while expr stmt-list)
-    expr -> integer | identifier | (+ expr expr) | (- expr expr) | (* expr expr)
+    expr -> integer | identifier | (+ expr expr) | (- expr expr) | 
+            (* expr expr) 
 
 
 This package contains all of the files for Assignment #5.
 
 =======
 
-scheme1.scm
+beval.scm
 
-Contains the implementation of an interpreter for the proposition calculus
-using scheme.
+  Contains the implementation of an interpreter for the proposition
+  calculus using scheme.
+
+tautprover.scm
+
+   Contains the implementation of the tautology prover.  Loads beval.scm.
 
 scheme3.scm
 
@@ -102,17 +111,44 @@ makefile
 
 TEST FILES - Will be explained in detail below :
 ________________
+scheme1.scm
+
+  Contains tests cases for the implementation of the (beval ...)
+  interpreter. Loads beval.scm.
+
+scheme2.scm
+
+  Contains test cases for the implementation of the (tautology-prover
+  ...). Loads tautprover.scm.
+   
 TODO - Document test files used.
 
 README	** This file. Contains details out how to run files, build, test, etc.
 
-RUNNING: Assignment #5, Part #1
+RUNNING/TESTING: Assignment #5, Part #1
 ___________
-TODO - Document how to run
+make view-part-1
+     to see the implementation of the propositional logic interpreter
+--> to run: (load "beval.scm") and then type in a call to (beval ...)
+  such as: (beval '(imply p q) '((p #t) (q #f))), where '(imply p q)
+  is a boolean expr and '((p #t) (q #f)) is an environment with two
+  bindings (one of p of #t; one for q of #f). 
 
-TESTING: Assignment #5, Part #2
+  Automated tests from scheme1.scm can be run by typing "make
+  test-part-1" at the shell prompt. 
+
+
+RUNNING/TESTING: Assignment #5, Part #2
 ___________
-TODO - Document how this was tested
+make view-part-2
+      to see the implementation of the tautology prover
+--> to run: (load "tautprover.scm") and then type in a call to
+  (tautology-prover ...) such as: (tautology-prover '(or p (not p))),
+  where '(or p (not p)) is the boolean expression that should be true
+  for all bindings of the variables contained therein.
+
+  Automated tests from scheme2.scm can be run by typing "make
+  test-part-2" at the shell prompt.
 
 RUNNING/TESTING: Assignment #5, Part #3
 ___________

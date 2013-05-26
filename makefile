@@ -13,7 +13,7 @@ TAUTPROVER_TESTS=scheme2.scm
 MINI_LANG=scheme5.scm
 MINI_LANG_TESTS=mini_lang_tests/
 
-.PHONY : clean tags release test view-part-4 view-part-3 view-part-5
+.PHONY : clean tags release test-part-1 test-part-2 test-part-5 view-part-1 view-part-2 view-part-3 view-part-4 view-part-5
 
 # define the run-test function
 run-scheme = cat $(1) | $(SCHEME) --batch-mode
@@ -34,6 +34,18 @@ test-part-5:
 		$(call run-mini-lang, $$file); \
 	done;                          \
 
+view-part-1:
+	@more beval.scm
+
+view-part-2:
+	@more tautprover.scm
+
+view-part-3:
+	@more scheme3.scm
+
+view-part-4:
+	@more scheme4.patch dynamic_v_lexical.scm
+
 view-part-5:
 	@more scheme5.scm
 
@@ -45,8 +57,3 @@ release:
 	mkdir $(TOP)/$(RELEASE_DIR); \
 	mv $(RELEASE_FILE) $(TOP)/$(RELEASE_DIR)
 
-view-part-4:
-	@more scheme4.patch dynamic_v_lexical.scm
-
-view-part-3:
-	@more scheme3.scm

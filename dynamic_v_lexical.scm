@@ -1,3 +1,8 @@
+;;Uncomment and load, but then you must type in the functions
+
+;;;(define the-global-environment (setup-environment))
+;;;(driver-loop)
+
 ;; This code behaves different depanding on scoping rules
 (define x 3)
 

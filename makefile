@@ -17,7 +17,7 @@ MINI_LANG_TESTS=mini_lang_tests/
 
 # define the run-test function
 run-scheme = cat $(1) | $(SCHEME) --batch-mode
-run-mini-lang = cat $(MINI_LANG) $(1)| $(SCHEME) -batch-mode
+run-mini-lang = cat $(MINI_LANG) $(1)| $(SCHEME) --batch-mode
 
 test-part-1:
 	@echo "Running $(BEVAL_TESTS)";
@@ -56,4 +56,3 @@ release:
 	rm -rf $(ASSIGNMENT); \
 	mkdir $(TOP)/$(RELEASE_DIR); \
 	mv $(RELEASE_FILE) $(TOP)/$(RELEASE_DIR)
-

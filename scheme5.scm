@@ -1,242 +1,205 @@
-;; Grammar, for reference
-;; 1. prog -> stmt-list
-;; 2. stmt-list -> (stmt-seq)
-;; 3. stmt-seq -> stmt | stmt stmt-seq
-;; 4. stmt -> assign-stmt | if-stmt | while-stmt
-;; 5. assign-stmt -> (assign identifier expr)
-;; 6. if-stmt -> (if expr stmt-list stmt-list)
-;; 7. while-stmt -> (while expr stmt-list)
-;; 8. expr -> integer | identifier | (+ expr expr) | (- expr expr) | (* expr expr)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;; Implements an interpreter for the mini-language using scheme.
+;;;;
+;;;;    Name:       scheme5.scm
+;;;;    Purpose:    Implements an interpreter for the mini-language using scheme.
+;;;;                Grammar details below:
+;;;;
+;;;;                    < prog > ? (stmtlist)
+;;;;                < stmtlist > ? (stmt stmtlist) | (stmt)
+;;;;                    < stmt > ? assign_stmt | if_stmt | while_stmt
+;;;;             < assign_stmt > ? (assign id expr)
+;;;;                 < if_stmt > ? (if expr stmtlist stmtlist)
+;;;;              < while_stmt > ? (while expr stmtlist)
+;;;;                    < expr > ? (+ expr term) | (- expr term) | term
+;;;;                    < term > ? (* term factor) | factor
+;;;;                  < factor > ? ( expr ) | NUMBER | IDENT
+;;;;
+;;;;
+;;;;    Authors:    Jon Boone
+;;;;		    Joshua Datko
+;;;;		    Paul DeMicco
+;;;;		    Joseph Heenan
+;;;;
+;;;;    Created:    05/25/2013
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (string-input)
-   (display "Enter expression: ")
-   (define readtext (string (read)))
-   (display (string-append "Got input: " readtext))
-   (newline)
-   readtext)
+;;; program evaluator - provided by Dr Johnson
+(define (meval prog)
+  (let ((env (initial-environment)))
+    (if (stmtlist? prog)
+        (begin
+          (pp (hash-table->alist (eval-stmtlist prog env)))
+          'ok)
+        (error "illegal program"))))
 
-; Begin ASSIGN
+;;; stmtlist evaluator - provided by Dr Johnson
+(define (eval-stmtlist stmtlist env)
+  (if (null? stmtlist)
+      env
+      (eval-stmtlist (cdr stmtlist) (eval-stmt (car stmtlist) env))))
 
-(define symboltable (make-string-hash-table 100))
-
-(define assign
-  (lambda (identifier expr)
-    (hash-table/put! symboltable identifier expr)))
-
-(define none (string 'none))
-
-(define null '())
-
-(define has-ident?
-  (lambda (identifier)
-  (not (eq? (eval-ident identifier) none))))
-
-(define eval-ident
-  (lambda (identifier)
-    (hash-table/get symboltable identifier none)))
-
-(define identifier?
-  (lambda (identifier)
-    (string? identifier)))
-
-(define assign-stmt?
-  (lambda (stmt)
-    (eq? (car (parse-expr stmt)) 'assign)))
-
-(define eval-assign
-  (lambda (assignstmt)
-    (define parsedexpr (parse-expr assignstmt))
-    (define ident (cadr parsedexpr))
-    (define val (car (cdr (cdr parsedexpr))))
-    (assign (string ident) val)))
-; END Assign
-
-; BEGIN MATH
-
-
-(define parse-operator
-	 (lambda(x) (car (car x))))
-
-(define plus?
-  (lambda (expr)
-    (eq? expr '+)))
-
-(define plus-expr?
-	  (lambda (expr)
-	    (plus? (parse-operator expr))))
-
-(define minus?
-  (lambda (expr)
-    (eq? expr '-)))
-
-(define minus-expr?
-  (lambda (expr)
-    (minus? (parse-operator expr))))
-
-(define times?
-  (lambda (expr)
-    (eq? expr '*)))
-
-(define times-expr?
-  (lambda (expr)
-    (times? (parse-operator expr))))
-
-
-(define ( eval-times expr)
- (let ((operator (car expr))
-    (arg1 (car expr))
-    (arg2 (cadr expr))
-    (arg3 (caddr expr)))
-  (* arg2 arg3)
-  )
-)
-
-
-(define (eval-matharg arg)
+;;; stmt evaluator - provided by Dr Johnson
+(define (eval-stmt stmt env)
   (cond
-   ( (has-ident? (string arg)) (eval-ident (string arg)))
-   ( (number? arg) arg)
-   ( else #f)))
+   ((assign-stmt? stmt) (eval-assign stmt env))
+   ((if-stmt? stmt) (eval-if stmt env))
+   ((while-stmt? stmt) (eval-while stmt env))))
 
-(define (parse-expr expr)
-  (car expr))
 
-(define (eval-math expr op)
-  (define parsedexpr (parse-expr expr))
-  (let ((operator (parse-operator expr))
-    (arg2   (eval-matharg (cadr parsedexpr)) )
-    (arg3   (eval-matharg (caddr parsedexpr)) ))
-  (op arg2 arg3)
-  )
-)
+;;; assignstmt evaluator - provided by Dr Johnson
+(define (eval-assign stmt env)
+  (let ((var (cadr stmt))
+        (expr (caddr stmt)))
+    (insert-binding var (eval-expr expr env) env)))
 
-(define (math-expr? expr)
-  (or (plus-expr? expr) (minus-expr? expr) (times-expr? expr)))
+;;; ifstmt evaluator - provided by Dr Johnson
+(define (eval-if stmt env)
+  (let ((expr (cadr stmt))
+        (S1 (caddr stmt))
+        (S2 (cadddr stmt)))
+    (if (not (< (eval-expr expr env) 1))
+        (eval-stmtlist S1 env)
+        (eval-stmtlist S2 env))))
 
-(define (eval-mathexpr expr)
+;;; whilestmt evaluator - provided by Dr Johnson
+(define (eval-while stmt env)
+  (define (loop expr S env)
+    (if (not (< (eval-expr expr env) 1))
+        (loop expr S (eval-stmtlist S env))
+        env))
+  (let ((expr (cadr stmt))
+        (S (caddr stmt)))
+    (loop expr S env)))
+
+
+;;; verify that the stmtlist is valid
+(define (stmtlist? stmts)
+  (if (list? stmts)
+      (if (null? stmts)
+          #f ; empty-list - not valid
+          (verify-stmts stmts))
+      #f)) ; not list - not valid
+
+;;; verify that the individual stmts are valid
+(define (verify-stmts stmts)
+  (if (null? stmts)
+      #t
+      (let ((first-stmt (car stmts))
+            (rest (cdr stmts)))
+        (and (or (assign-stmt? first-stmt)
+                 (if-stmt? first-stmt)
+                 (while-stmt? first-stmt))
+             (verify-stmts rest)))))
+
+;;; check whether the stmt is an assign stmt
+(define (assign-stmt? stmt)
+  (if (eq? (car stmt) 'assign)
+      #t
+      #f))
+
+;;; check whether the stmt is an if stmt
+(define (if-stmt? stmt)
+  (if (eq? (car stmt) 'if)
+      #t
+      #f))
+
+;;; check whether the stmt is a while stmt
+(define (while-stmt? stmt)
+  (if (eq? (car stmt) 'while)
+      #t
+      #f))
+
+;; Environment functions
+;;; set up the initial environment
+(define (initial-environment)
+  (make-equal-hash-table 100))
+
+;;;Insert the binding into the current envirnoment and return the updated hash
+;;;table
+(define (insert-binding var val env)
+  (begin (hash-table/put! env var val)
+	 env))
+
+;;; Lookup the binding and return the value, returns "none" if not found
+(define (lookup-binding var env)
+  (let ((binding (hash-table/get env var 'none)))
+    (if (eq? binding 'none)
+        (error "unbound variable")
+        binding)))
+
+;;; expr evaluator
+(define (eval-expr expr env)
+  (if (list? expr)
+      (cond
+       ((plus-expr? expr) (eval-plus expr env))
+       ((minus-expr? expr) (eval-minus expr env))
+       (else (eval-term expr env)))
+      (eval-term expr env)))
+
+;;; term evaluator
+(define (eval-term expr env)
+  (if (list? expr)
+      (if (times-expr? expr)
+          (eval-times expr env)
+          (eval-factor expr env))
+      (eval-factor expr env)))
+
+;;; factor evaluator
+(define (eval-factor expr env)
   (cond
-   ( (number? expr) expr)
-   ( (plus-expr? expr) (eval-plus expr) )
-   ( (minus-expr? expr) (eval-minusnew expr) )
-   ( (times-expr? expr) (eval-times expr) )
-   (else #f)
-   )
-)
-
-(define (eval-plus expr)
-  (eval-math expr +))
-
-(define (eval-minus expr)
-  (eval-math expr -))
-
-(define eval-minusnew
-  (lambda (arg1 arg2)
-    (- (eval-matharg arg1) (eval-matharg arg2))))
-
-(define (eval-times expr)
-  (eval-math expr *))
-
-(define eval-expr
-  (lambda (expr)
-    (cond
-     ( (math-expr? expr) (eval-mathexpr expr))
-     (else #f)
-     )
-    )
-)
+   ((list? expr) (let ((factor (car expr)))
+                   (eval-factor factor env)))
+   ((number? expr) expr)
+   ((ident? expr) (eval-ident expr env))
+   (else 0)))
 
 
-; END Math
+;;; ident predicate
+(define (ident? expr)
+  (if (symbol? expr)
+      #t
+      #f))
 
-; Begin Stmt
+;;; ident evaluator
+(define (eval-ident expr env)
+  (lookup-binding expr env))
 
-(define eval-stmt
-  (lambda (stmt)
-    (cond
-     ( (while-stmt? stmt) (eval-while stmt))
-     ( (if-stmt? stmt) (eval-if stmt))
-     ( (assign-stmt? stmt) (eval-assign stmt))
-     ( else #f))))
+;;; plus-expr? predicate
+(define (plus-expr? expr)
+  (if (eq? (car expr) '+)
+      #t
+      #f))
 
-; Begin StmtList
+;;; minus-expr? predicate
+(define (minus-expr? expr)
+  (if (eq? (car expr) '-)
+      #t
+      #f))
 
-(define make-stmtseq
-  (lambda (stmt stmtseq)
-    (vector stmt stmtseq)))
+;;; times-expr? predicate
+(define (times-expr? expr)
+  (if (eq? (car expr) '*)
+      #t
+      #f))
 
-(define car-stmtlist
-  (lambda (stmtlist)
-    (cadr stmtlist)))
+;;; plus-expr evaluator
+(define (eval-plus expr env)
+  (let ((first-arg (eval-expr (cadr expr) env))
+        (second-arg (eval-term (caddr expr) env)))
+    (+ first-arg second-arg)))
 
-(define eval-stmtlist
-  (lambda (sl)
-    (vector-map eval-stmt sl)))
+;;; minus-expr evaluator
+(define (eval-minus expr env)
+  (let ((first-arg (eval-expr (cadr expr) env))
+        (second-arg (eval-term (caddr expr) env)))
+    (- first-arg second-arg)))
 
-; End StmtList
+;;; times-expr evaluator
+(define (eval-times expr env)
+  (let ((first-arg (eval-term (cadr expr) env))
+        (second-arg (eval-factor (caddr expr) env)))
+    (* first-arg second-arg)))
 
-; Begin While
-
-(define while?
-  (lambda (expr)
-    (eq? (car (cadr expr)) 'while)))
-
-(define while-expr?
-  (lambda (expr)
-    (while? (parse-operator expr))))
-
-(define while-cond
-  (lambda (expr)
-    (cadr (cadr expr))))  ; Get the condition associated with the while
-
-(define while-stmtlist
-  (lambda (expr)
-    (car (cdr (cdr (cadr w)))))) ; Get the stmtlist associated with the while
-
-(define eval-while
-  (lambda (expr)
-    (define cond (while-cond expr))
-    (define sl (while-stmtlist expr))
-    (unless? (eq? 0 (eval-math cond))
-	     (eval-stmtlist sl))))
-
-(define (while cond . args)
-  ( (unless? (eq? cond 0)
-	     (for-each
-	      (lambda(x) (eval-stmt x)) args))))
-
-; Begin If
-
-(define eval-if
-  (lambda (ifcond truelist falselist)
-    (cond
-     ( (eq? 0 (eval-matharg ifcond)) (eval-stmtlist truelist))
-     ( else (eval-stmtlist falselist)))))
-
-; End If
-
-; Begin while tests
-
-(define i (string 'i))
-(assign i 5)
-
-(define f '( (+ 1 2) ))
-(define g '( (+ 3 5) ))
-(define assignstmt1 '( (assign j 10)))
-(define h '( (+ i j)))
-(define assignstmt2 '( (assign j 11)))
-(define stmtlist '( ((assign j 10) (assign j 11))))
-(define ifstmt '( if f ((assign j 10) (assign j 11))))
-(plus-expr? f)
-(eval-mathexpr f)
-(eval-assign assignstmt1)
-(eval-mathexpr h)
-(eval-expr h)
-
-; Begin PROF Example
-
-(define assignprof '((asign n (0 - 5))))
-
-; Example usagee:
-;48 error> (define f2 (read))
-;'(+ 1 2)
-; (plus-expr? f2)
+;; Display a nice done message when loaded
+'MINI-LANGUAGE-INTERPRETER-LOADED

@@ -20,10 +20,10 @@ This assignment is broken into 5 parts detailed below.
     < boolexp > → (not boolexp)
     < boolexp > → (implies boolexp boolexp)
                   [P => Q, where P is the first argument and Q is the
-                  second argument]   
+                  second argument]
     < boolexp > → (equiv boolexp boolexp)
                   [P <=> Q, where P is the first argument and Q is the
-                  second argument]  
+                  second argument]
 
   The interpreter takes a boolean expression and an environment and
   returns either #t or #f. If an undefined variable is encountered
@@ -36,14 +36,14 @@ This assignment is broken into 5 parts detailed below.
     tautologies. I.E. a boolean expression that is true for all
     possible values of the variables. E.G. (or P (not P)), (equiv (or
     P Q) (or Q P)), (equiv (or P Q) (or P (and (not P) Q))).  The
-    prover generates all possible values for the variables occuring in
+    prover generates all possible values for the variables occurring in
     the boolean expression [all possible bindings], and uses the
     interpreter to verify that the expression is true for all possible
-    variable bindings. 
+    variable bindings.
 
 3.) Trace scheme interpreter from SICP using as input the following
     two expressions [you will have to add =, *, - as primitive
-    procedures for this to work]. 
+    procedures for this to work].
 
           (define (fact n)
              (if (= n 0) 1 (* n (fact (- n 1)))))
@@ -65,9 +65,10 @@ This assignment is broken into 5 parts detailed below.
     assign-stmt -> (assign identifier expr)
     if-stmt -> (if expr stmt-list stmt-list)
     while-stmt -> (while expr stmt-list)
-    expr -> integer | identifier | (+ expr expr) | (- expr expr) | 
-            (* expr expr) 
+    expr -> integer | identifier | (+ expr expr) | (- expr expr) |
+            (* expr expr)
 
+*******************************************************************************
 
 This package contains all of the files for Assignment #5.
 
@@ -84,27 +85,26 @@ tautprover.scm
 
 scheme3.scm
 
-The solution for part 3 requires the meta linguistic evaluator from chapter 4.
-So, you must load "ch4-mceval.scm" and then load "scheme3.scm" and then enter
-the function found at the top of "scheme3.scm".  The trace is detailed as
+    The solution for part 3 requires the meta linguistic evaluator from chapter
+4.  So, you must load "ch4-mceval.scm" and then load "scheme3.scm" and then
+enter the function found at the top of "scheme3.scm".  The trace is detailed as
 comments in scheme3.scm.
 
 scheme4.scm
 
-Contains the scheme code that modifies the SICP interpreter to use dynamic
+    Contains the scheme code that modifies the SICP interpreter to use dynamic
 instead of static scope.  run "make view-part-4" to view the patch which shows
 the changes between the lexical scope base file (ch4-mceval.scm) and the
 dynamic scope file.  dynamic_v_lexical.scm shows a set of functions that
 produce different results depending on scoping rules.
 
-NOTE: You will have to restart the scheme interpreter between runs as they both
-try to define "eval" and it will not working correctly.
+    NOTE: You will have to restart the scheme interpreter between runs as they
+both try to define "eval" and it will not working correctly.
 
 scheme5.scm
 
-Contains the implementation of an interpreter for the mini language in scheme.
-
-makefile
+    Contains the implementation of an interpreter for the mini language in
+scheme.
 
 =====
 
@@ -120,8 +120,6 @@ scheme2.scm
 
   Contains test cases for the implementation of the (tautology-prover
   ...). Loads tautprover.scm.
-   
-TODO - Document test files used.
 
 README	** This file. Contains details out how to run files, build, test, etc.
 
@@ -132,10 +130,10 @@ make view-part-1
 --> to run: (load "beval.scm") and then type in a call to (beval ...)
   such as: (beval '(imply p q) '((p #t) (q #f))), where '(imply p q)
   is a boolean expr and '((p #t) (q #f)) is an environment with two
-  bindings (one of p of #t; one for q of #f). 
+  bindings (one of p of #t; one for q of #f).
 
   Automated tests from scheme1.scm can be run by typing "make
-  test-part-1" at the shell prompt. 
+  test-part-1" at the shell prompt.
 
 
 RUNNING/TESTING: Assignment #5, Part #2
@@ -163,7 +161,7 @@ make view-part-4
      to see the differences to implement dynamic scope and the test code.
 --> to run: load "scheme.4" and then load "dynamic_v_lexical.scm" and uncomment
 and run the first two lines to start the driver loop.  Then enter the code in
-dynmaic_v_lexical to see the difference.  Shut down the interpreter and perform
+dynamic_v_lexical to see the difference.  Shut down the interpreter and perform
 the same steps except load "ch4-mceval.scm" to see it with lexical scoping.
 
 RUNNING: Assignment #5, Part #5

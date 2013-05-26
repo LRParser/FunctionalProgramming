@@ -75,12 +75,21 @@ using scheme.
 
 scheme3.scm
 
-The solution for part 3 requires the
+The solution for part 3 requires the meta linguistic evaluator from chapter 4.
+So, you must load "ch4-mceval.scm" and then load "scheme3.scm" and then enter
+the function found at the top of "scheme3.scm".  The trace is detailed as
+comments in scheme3.scm.
 
 scheme4.scm
 
 Contains the scheme code that modifies the SICP interpreter to use dynamic
-instead of static scope.
+instead of static scope.  run "make view-part-4" to view the patch which shows
+the changes between the lexical scope base file (ch4-mceval.scm) and the
+dynamic scope file.  dynamic_v_lexical.scm shows a set of functions that
+produce different results depending on scoping rules.
+
+NOTE: You will have to restart the scheme interpreter between runs as they both
+try to define "eval" and it will not working correctly.
 
 scheme5.scm
 
@@ -101,22 +110,32 @@ RUNNING: Assignment #5, Part #1
 ___________
 TODO - Document how to run
 
-TESTING: Assignment #5, Part #1
+TESTING: Assignment #5, Part #2
 ___________
 TODO - Document how this was tested
 
-RUNNING: Assignment #5, Part #4
+RUNNING/TESTING: Assignment #5, Part #3
 ___________
-TODO - Document how to run
+make view-part-3
+     to see the trace description
+--> to run: load "ch4-mceval.scm" then load "scheme3.scm" and type in the
+function (since the new REPL is running)
 
-TESTING: Assignment #5, Part #4
+RUNNING/TESTING: Assignment #5, Part #4
 ___________
-TODO - Document how this was tested
+make view-part-4
+     to see the differences to implement dynamic scope and the test code.
+--> to run: load "scheme.4" and then load "dynamic_v_lexical.scm" and uncomment
+and run the first two lines to start the driver loop.  Then enter the code in
+dynmaic_v_lexical to see the difference.  Shut down the interpreter and perform
+the same steps except load "ch4-mceval.scm" to see it with lexical scoping.
 
 RUNNING: Assignment #5, Part #5
 ___________
-TODO - Document how to run
+Easiest way is to run "make test-part-5".
 
 TESTING: Assignment #5, Part #5
 ___________
-TODO - Document how this was tested
+Various mini language programs were ported into scheme-mini-language in the
+mini_lang_tests folder.  Each of these were run and the final environment was
+analyzed to ensure correct operation.

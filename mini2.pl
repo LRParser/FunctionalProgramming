@@ -39,3 +39,6 @@ reduce_value(config(E,Env),V) :- reduce_all(config(E,Env),config(V,Env)).
 
 % A fact to help with if statements
 isZero(0).
+
+% Conditional, True body, False body, Statement to execute
+if(C,T,F,S) :- (isZero(C) -> S = T; S = F).

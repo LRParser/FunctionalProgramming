@@ -36,3 +36,6 @@ reduce_all(config(E,Env),config(E2,Env)) :-
      reduce(config(E,Env),config(E1,Env)), reduce_all(config(E1,Env),config(E2,Env)).
 
 reduce_value(config(E,Env),V) :- reduce_all(config(E,Env),config(V,Env)).
+
+% A fact to help with if statements
+isZero(0).

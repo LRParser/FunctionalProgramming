@@ -1,0 +1,54 @@
+Exercise 4.65.  Cy D. Fect, looking forward to the day when he will rise in the organization, gives a query to find all the wheels (using the wheel rule of section 4.4.1):
+
+(wheel ?who)
+
+To his surprise, the system responds
+
+;;; Query results:
+(wheel (Warbucks Oliver))
+(wheel (Bitdiddle Ben))
+(wheel (Warbucks Oliver))
+(wheel (Warbucks Oliver))
+(wheel (Warbucks Oliver))
+
+Why is Oliver Warbucks listed four times? 
+Oliver Warbucks is the supervisor to 3 middle managers (Ben, Eben, DeWitt) and also
+supervises himself which is why he is listed 4 time.  Although Dewitt is not a manager
+the rule
+
+Also, as is well known,
+
+(can-do-job (administration secretary)
+            (administration big wheel))
+			
+causes Dewitt to be able to be a manager.
+
+Proof Below:
+
+/*****************************************************************************/
+/* Table Data from                                                           */
+/* http://mitpress.mit.edu/sicp/full-text/book/book-Z-H-29.html#%_sec_4.4.1  */
+/*****************************************************************************/
+Name				Address								Job								Salary	Supervisor			IsSupervisor	IsWheel
+---------------		--------------------------------	----------------------------	------	---------------		------------	-------
+Bitdiddle Ben		Slumerville (Ridge Road) 10)		computer wizard					60000	Warbucks Oliver		YES				YES
+Hacker Alyssa P		Cambridge (Mass Ave) 78)			computer programmer				40000	Bitdiddle Ben		YES	
+Fect Cy D			Cambridge (Ames Street) 3)			computer programmer				35000	Bitdiddle Ben		
+Tweakit Lem E		Boston (Bay State Road) 22)			computer technician				25000	Bitdiddle Ben		
+Reasoner Louis		Slumerville (Pine Tree Road) 80)	computer programmer trainee		30000	Hacker Alyssa P		
+Scrooge Eben		Weston (Shady Lane) 10)				accounting chief accountant		75000	Warbucks Oliver		YES	
+Cratchet Robert		Allston (N Harvard Street) 16)		accounting scrivener			18000	Scrooge Eben		
+Aull DeWitt			Slumerville (Onion Square) 5)		administration secretary		25000	Warbucks Oliver		
+Warbucks Oliver		Swellesley (Top Heap Road))			administration big wheel		150000	<NONE>				YES				YES
+
+/*****************************************************************************/
+/* Wheel rule from                                                           */
+/* http://mitpress.mit.edu/sicp/full-text/book/book-Z-H-29.html#%_sec_4.4.1  */
+/*****************************************************************************/
+The following rule declares that a person is a ``wheel'' in an organization if he supervises someone who is in turn a supervisor:					
+					
+(rule (wheel ?person)					
+      (and (supervisor ?middle-manager ?person)					
+           (supervisor ?x ?middle-manager)))					
+
+

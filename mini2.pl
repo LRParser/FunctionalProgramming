@@ -37,8 +37,10 @@ reduce_all(config(E,Env),config(E2,Env)) :-
 
 reduce_value(config(E,Env),V) :- reduce_all(config(E,Env),config(V,Env)).
 
-% A fact to help with if statements
-isZero(0).
+% Support for if
+reduce(config(if(V1,V2,V3),Env),config(R,Env)) :- integer(V1), integer(V2), integer(V3), V1 =:= 0, !, R is V2.
+reduce(config(if(V1,V2,V3),Env),config(R,Env)) :- integer(V1), integer(V2), integer(V3), V1 =\= 0, !, R is V3.
 
-% Conditional, True body, False body, Statement to execute
-if(C,T,F,S) :- (isZero(C) -> S = T; S = F).
+% If test case
+% reduce(config(if(0,1,2),[]),Env). Returns 1
+% reduce(config(if(1,1,2),[]),Env). Returns 2

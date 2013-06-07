@@ -54,3 +54,13 @@ update([value(I,_)|Envs],value(I,V),[value(I,V)|Envs]).
 % Test cases
 % update([],value(x,3),[value(x,3)]).
 % update([x,4],value(x,3),[value(x,3)]).
+
+% Changing binding
+update([I,X],value(I,V),[value(I,V)]).
+
+
+% Handle assign
+reduce(config(assign(I,V),[])) :- update([],value(I,V),[value(I,V)]).
+% Test case: reduce(config(assign(x,6),[]),Env).
+% Handle sequence
+reduce(config(seq(stmtFirst,Rest),EnvtInitial)) :- config(seq(_,Rest),EnvtNew).

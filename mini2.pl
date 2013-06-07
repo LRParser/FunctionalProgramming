@@ -44,3 +44,13 @@ reduce(config(if(V1,V2,V3),Env),config(R,Env)) :- integer(V1), integer(V2), inte
 % If test case
 % reduce(config(if(0,1,2),[]),Env). Returns 1
 % reduce(config(if(1,1,2),[]),Env). Returns 2
+
+% Support for updating values (first step to supporting assign)
+
+% Empty envt
+update([],value(I,V),[value(I,V)]).
+% Handle case of changing binding
+update([value(I,_)|Envs],value(I,V),[value(I,V)|Envs]).
+% Test cases
+% update([],value(x,3),[value(x,3)]).
+% update([x,4],value(x,3),[value(x,3)]).

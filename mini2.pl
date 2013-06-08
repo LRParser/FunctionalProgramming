@@ -54,14 +54,29 @@ update([],value(I,V),[value(I,V)]).
 update([value(I,_)|Envs],value(I,V),[value(I,V)|Envs]).
 % Test cases
 % update([],value(x,3),[value(x,3)]).
-% update([x,4],value(x,3),[value(x,3)]).
-
-% Changing binding
-update([I,X],value(I,V),[value(I,V)]).
-
+% update([value(x,4)],value(x,3),[value(x,3)]).
 
 % Handle assign with no pre-existing binding in envt
 reduce(config(assign(I,V),[value(I,V)])) :- update([],value(I,V),[value(I,V)]).
+
+reduce(config(assign(I,V),[value(I,V)])) :- update([I,X],value(I,V),[value(I,V)]).
+
 % Test case: reduce(config(assign(x,6),Env)).
 % Handle sequence
-reduce(config(seq(stmtFirst,Rest),EnvtInitial)) :- config(seq(_,Rest),EnvtNew).
+reduce(config(seq(stmtFirst,Rest),EnvtInitial)) :- config(seq(Rest),EnvtNew).
+
+% Overall test cases (from Lecture Slides):
+
+% Test cases:
+% reduce_exp_all(config(plus(times(2,5),minus(2,5)),[]),V).
+% V = config(7,[])
+% reduce_exp_all(config(plus(times(x,5),minus(2,y)),[value(x,2),value(y,5)]),V).
+% V = config(7,[value(x,2),value(y,5)])
+% reduce_all(config(seq(assign(x,3),assign(y,4)),[]),Env).
+% Env = [value(x,3),value(y,4)]
+% reduce(config(if(3,assign(x,3),assign(x,4)),[]),Env).
+% Env = [value(x,3)]
+% reduce(config(if(0,assign(x,3),assign(x,4)),[]),Env).
+% Env = [value(x,4)]
+% reduce_all(config(if(n,assign(i,0),assign(i,1)),[value(n,3)]),Env).
+% Env = [value(n,3),value(i,0)]

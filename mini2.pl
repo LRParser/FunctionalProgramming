@@ -41,6 +41,27 @@ reduce(config(minus(V1,V2),Env),config(R,Env)) :- integer(V1), integer(V2), !, R
 reduce(config(times(V1,V2),Env),config(R,Env)) :- integer(V1), integer(V2), !, R is V1*V2.
 reduce(config(I,Env),config(V,Env)) :- atom(I), lookup(Env,I,V).
 
+% Support for if when clauses are both assign, conditional is integer, and condition is true
+reduce(config(if(V1,assign(A,B),assign(_,_)),Env),lookup(Env,A,B)) :- integer(V1), V1 =\= 0.
+% Test case: reduce(config(if(3,assign(x,3),assign(x,4)),[]),Env).
+% Returns: [value(x,3)]
+
+% Support for if when clauses are both assign and conditional is integer, and condition is false
+reduce(config(if(V1,assign(_,_),assign(C,D)),[]),lookup(Env,C,D)) :- integer(V1), V1 =:= 0.
+% Test case: reduce(config(if(0,assign(x,3),assign(x,4)),[]),Env).
+% Returns: [value(x,4)]
+
+% Support for if when clause conditional is variable and evaluates to true
+reduce(config(if(E,assign(A,B),assign(_,_)),Env),lookup(Env,A,B)) :- lookup(Env,E,C), C =\= 0.
+% Test case: reduce(config(if(n,assign(i,0),assign(i,1)),[value(n,3)]),Env).
+
+% Support for if when clause conditional is variable and evaluates to false
+reduce(config(if(E,assign(_,_),assign(C,D)),Env),lookup(Env,C,D)) :- lookup(Env,E,0).
+% Test case: reduce(config(if(n,assign(i,0),assign(i,1)),[value(n,0)]),Env).
+
+% Support for if when conditional is expression (TODO)
+% reduce(config(if(E1,E2,E3),Env)) :- reduce(config(E1,Env).
+
 % Support for if with values passed
 reduce(config(if(V1,V2,V3),Env),config(R,Env)) :- integer(V1), integer(V2), integer(V3), V1 =\= 0, !, R is V2.
 reduce(config(if(V1,V2,V3),Env),config(R,Env)) :- integer(V1), integer(V2), integer(V3), V1 =:= 0, !, R is V3.
@@ -48,7 +69,7 @@ reduce(config(if(V1,V2,V3),Env),config(R,Env)) :- integer(V1), integer(V2), inte
 % reduce(config(if(1,2,3),[]),config(R,[])).
 % Above test case returns 2
 
-% Handle assign with no pre-existing binding in envt (not using update approach)
+% Handle assign with no pre-existing binding in envt
 reduce(config(assign(I,V),[]),[value(I,V)]) :- update([],value(I,V),[value(I,V)]).
 % Test case: reduce(config(assign(x,3),[]),[value(x,3)]).
 

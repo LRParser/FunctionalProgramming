@@ -60,8 +60,8 @@ update([value(I,_)|Envs],value(I,V),[value(I,V)|Envs]).
 update([I,X],value(I,V),[value(I,V)]).
 
 
-% Handle assign
-reduce(config(assign(I,V),[])) :- update([],value(I,V),[value(I,V)]).
-% Test case: reduce(config(assign(x,6),[]),Env).
+% Handle assign with no pre-existing binding in envt
+reduce(config(assign(I,V),[value(I,V)])) :- update([],value(I,V),[value(I,V)]).
+% Test case: reduce(config(assign(x,6),Env)).
 % Handle sequence
 reduce(config(seq(stmtFirst,Rest),EnvtInitial)) :- config(seq(_,Rest),EnvtNew).

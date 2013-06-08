@@ -40,10 +40,13 @@ reduce(config(plus(V1,V2),Env),config(R,Env)) :- integer(V1), integer(V2), !, R 
 reduce(config(minus(V1,V2),Env),config(R,Env)) :- integer(V1), integer(V2), !, R is V1-V2.
 reduce(config(times(V1,V2),Env),config(R,Env)) :- integer(V1), integer(V2), !, R is V1*V2.
 reduce(config(I,Env),config(V,Env)) :- atom(I), lookup(Env,I,V).
-% Support for if
-reduce(config(if(V1,V2,V3),Env),config(R,Env)) :- integer(V1), integer(V2), integer(V3), V1 =:= 0, !, R is V2.
-reduce(config(if(V1,V2,V3),Env),config(R,Env)) :- integer(V1), integer(V2), integer(V3), V1 =\= 0, !, R is V3.
 
+% Support for if with values passed
+reduce(config(if(V1,V2,V3),Env),config(R,Env)) :- integer(V1), integer(V2), integer(V3), V1 =\= 0, !, R is V2.
+reduce(config(if(V1,V2,V3),Env),config(R,Env)) :- integer(V1), integer(V2), integer(V3), V1 =:= 0, !, R is V3.
+% Test case for 'true' (non-zero value passed)
+% reduce(config(if(1,2,3),[]),config(R,[])).
+% Above test case returns 2
 
 % Handle assign with no pre-existing binding in envt (not using update approach)
 reduce(config(assign(I,V),[]),[value(I,V)]) :- update([],value(I,V),[value(I,V)]).

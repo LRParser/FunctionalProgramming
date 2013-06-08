@@ -28,3 +28,48 @@ http://www.cs.drexel.edu/~jjohnson/2012-13/spring/cs550/assignments/assign7.html
    evaluator.
 
 5. Prolog interpreter:
+
+    The interpreter supports evaluation of if and assign statements. Test cases are included in context in the
+    mini2.pl file; example input/output is:
+
+    ** Update tests **:
+
+    | ?- update([],value(x,3),[value(x,3)]).
+
+    yes
+    | ?- update([value(x,4)],value(x,3),[value(x,3)]).
+    Yes
+
+    ** Assign tests ** :
+
+    | ?- reduce(config(assign(x,3),[]),[value(x,3)]).
+
+    true ? 
+
+    yes
+    | ?- reduce(config(assign(x,3),[value(x,2)]),[value(x,3)]).
+
+    true ? 
+
+    Yes
+
+    ** If test cases **:
+
+    With false constant as conditional, the first test case associates with an envrionment where looking up 4 suceeds:
+
+     ?- reduce(config(if(0,assign(x,3),assign(x,4)),[]),Env).
+
+    Env = lookup(_,x,4) ? 
+    Yes
+
+    When true, looking up 3 suceeds:
+    | ?- reduce(config(if(1,assign(x,3),assign(x,4)),[]),Env).
+
+    Env = lookup([],x,3) ? 
+    Yes
+
+    In the final test, using a variable as a conditional for an if statement succeeds, as we can see that the value of 1 is looked up for in unifying I:
+    ?- reduce(config(if(n,assign(i,0),assign(i,1)),[value(n,0)]),Env).
+
+    Env = lookup([value(n,0)],i,1) ? 
+    Yes

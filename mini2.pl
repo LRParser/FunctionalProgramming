@@ -9,26 +9,12 @@
 %    V = config(20,[value(x,2),value(y,1)]) ?
 %
 
-% Helpers
-% not(P) :- (call(P) -> fail ; true).
-car([H|T],H).
-cdr([H|T],T).
-
-% Handle replace
-% Base case: No matter what is replaced, given an empty input list, output is an empty list
-% Adaptation of code from user svick at: http://stackoverflow.com/questions/5850937/prolog-element-in-lists-replacement
-replace(_,_,[],[]).
-replace(F,R,[F|T],[R|T2]) :- replace(F,R,T,T2).
-replace(F,R,[H|T],[H|T2]) :-  H\= F, replace(O,R,T,T2).
-
 lookup([value(I,V)|_],I,V).
 lookup([_|Es],I,V) :- lookup(Es,I,V), !.
 
 % Empty envt
 update([],value(I,V),[value(I,V)]).
 update([value(I,_)|Envs],value(I,V),[value(I,V)|Envs]).
-update(Env,value(I,V),R) :- member(value(I,_),Env) -> replace(value(I,_),value(I,V),Env,R); R = [value(I,V),Env].
-%(isZero(C) -> S = T; S = F). 
 
 % Documenting previously-failed approaches for updating when variable to update isn't at front of Envt
 % Failed: update([_|value(I,_)],value(I,V)) :- update(Es,value(I,V)).
@@ -70,11 +56,11 @@ reduce(config(assign(I,V),[]),[value(I,V)]) :- update([],value(I,V),[value(I,V)]
 % Test case: reduce(config(assign(x,3),[]),[value(x,3)]).
 
 % Handle assign with pre-existing binding
-% reduce(config(assign(I,T),[value(I,V)]),[value(I,T)]) :- update([value(I,V)],value(I,T),[value(I,T)]).
+reduce(config(assign(I,T),[value(I,V)]),[value(I,T)]) :- update([value(I,V)],value(I,T),[value(I,T)]).
 % Test case: reduce(config(assign(x,3),[value(x,2)]),[value(x,3)]).
 
 % Handle assign with multiple bindings in envt
-reduce(config(assign(I,T),Env),lookup(Env1,I,T)) :- update(Env,value(I,T),Env1).
+% reduce(config(assign(I,T),Env),lookup(Env1,I,T)) :- update(Env,value(I,T),Env1).
 % Support for if when clauses are both assign, conditional is integer, and condition is true
 reduce(config(if(V1,assign(A,B),assign(_,_)),Env),lookup(Env,A,B)) :- integer(V1), V1 =\= 0.
 % Test case: reduce(config(if(3,assign(x,3),assign(x,4)),[]),Env).

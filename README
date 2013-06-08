@@ -1,0 +1,30 @@
+Group #9 Assignment #7
+	 Jon Boone
+	 Joshua Datko
+	 Paul DeMicco
+	 Joseph Heenan
+
+http://www.cs.drexel.edu/~jjohnson/2012-13/spring/cs550/assignments/assign7.html
+
+1. Question 4.59 of SICP
+   see: SICP_4_59.scm for the code to be entered into the query evaluator
+
+2. Question 4.65 of SICP
+   see: SICP_4_65.txt for a text answer
+
+3. 4.58 of SICP
+   see: SICP_4_68.scm for the scheme answer, which has to be entered into the
+   evaluator.
+
+   see: SICP_4_68.pl for the prolog answer
+
+4. 4.75 of SICP
+   see: query-unique.scm for the modified evaluator.
+
+   For convenience, see SICP_4_75.patch to easily see the differences between
+   the base file.
+
+   see: SICP_4_75.scm for the queries that must be entered into the query
+   evaluator.
+
+5. Prolog interpreter:

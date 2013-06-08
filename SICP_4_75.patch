@@ -1,0 +1,54 @@
+--- ch4-query.scm	2013-06-08 13:53:48.000000000 -0400
++++ query-unique.scm	2013-06-08 13:43:26.000000000 -0400
+@@ -108,6 +108,19 @@
+ 
+ ;;(put 'not 'qeval negate)
+ 
++(define (uniquely-asserted contents frame-stream)
++  (stream-flatmap
++   (lambda (frame)
++     (let ((unique (qeval (unique-contents contents)
++			  (singleton-stream frame))))
++       (if (stream-unique? unique)
++	   unique
++	   the-empty-stream)))
++   frame-stream))
++
++;;(put 'unique 'qeval uniquely-asserted)
++
++
+ (define (lisp-value call frame-stream)
+   (stream-flatmap
+    (lambda (frame)
+@@ -382,6 +395,14 @@
+ 
+ (define (negated-query exps) (car exps))
+ 
++(define (unique-contents contents) (car contents))
++
++(define (stream-unique? frames)
++  (and (not (stream-null? frames))
++       (stream-null? (stream-cdr frames))
++       ))
++
++
+ (define (predicate exps) (car exps))
+ (define (args exps) (cdr exps))
+ 
+@@ -539,7 +560,7 @@
+ 	    ((eq? m 'insert-proc!) insert!)
+ 	    (else (error "Unknown operation -- TABLE" m))))
+     dispatch))
+-
++
+ ;;;; From instructor's manual
+ 
+ (define get '())
+@@ -567,6 +588,7 @@
+   (let ((operation-table (make-table)))
+     (set! get (operation-table 'lookup-proc))
+     (set! put (operation-table 'insert-proc!)))
++  (put 'unique 'qeval uniquely-asserted)
+   (put 'and 'qeval conjoin)
+   (put 'or 'qeval disjoin)
+   (put 'not 'qeval negate)
